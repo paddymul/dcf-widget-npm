@@ -5,7 +5,6 @@ import {DFViewer} from './DFViewer';
 import _ from 'lodash';
 import {CommandViewer} from './Commands';
 
-//@ts-ignore
 export function CommandDisplayer({filledCommands, style}) {
     const baseStyle = {margin: '0', textAlign: 'left'};
     const localStyle = {...baseStyle, ...style};
@@ -16,7 +15,6 @@ export function CommandDisplayer({filledCommands, style}) {
     );
 }
 
-//@ts-ignore
 export function PythonDisplayer({filledCommands, style}) {
     const [pyString, setPyString] = useState('');
 
@@ -30,13 +28,11 @@ export function PythonDisplayer({filledCommands, style}) {
             return;
         } else {
             fetch(pyCodeUrl).then(async (response) => {
-                console.log(response);
-                //@ts-ignore
+                //console.log(response);
                 const fullResp = await response.json();
-                console.log('fullResp', fullResp);
-                //@ts-ignore
+                //console.log('fullResp', fullResp);
                 const pyCode = fullResp['py'];
-                console.log('pyCode', pyCode);
+                //console.log('pyCode', pyCode);
                 setPyString(pyCode);
             });
         }
@@ -50,22 +46,20 @@ export function PythonDisplayer({filledCommands, style}) {
     );
 }
 
-//@ts-ignore
 const transformInstructions = (raw) => {
     return JSON.stringify([{symbol: 'begin'}, ...raw]);
 };
 
-//@ts-ignore
 export function TransformViewer({filledCommands, style}) {
     const [transDf, setTransDf] = useState(tableDf);
     const URLBase = 'http://localhost:5000/dcf/';
     const sliceArgs = 'slice_start=3&slice_end=50';
-    const emptyUrl = `${URLBase}df/1?${sliceArgs}`;
 
     useEffect(() => {
+        const emptyUrl = `${URLBase}df/1?${sliceArgs}`;
         const instructions = transformInstructions(filledCommands);
-        console.log('filledCommands', filledCommands);
-        console.log('instructions', instructions);
+        //console.log('filledCommands', filledCommands);
+        //console.log('instructions', instructions);
         const transUrl = `${URLBase}transform_df/1?instructions=${instructions}&${sliceArgs}`;
         if (filledCommands.length == 0) {
             requestDf(emptyUrl, setTransDf);
@@ -81,7 +75,6 @@ export function TransformViewer({filledCommands, style}) {
     );
 }
 
-//@ts-ignore
 export function DependentTabs({filledCommands}) {
     const [tab, _setTab] = useState('df');
     const setTab = (tabName: string) => {
@@ -135,7 +128,6 @@ export function DependentTabs({filledCommands}) {
     );
 }
 
-//@ts-ignore
 export function ColumnsEditor(
     {df, activeColumn}: {df: any; activeColumn: string} = {df: {}, activeColumn: 'stoptime'}
 ) {
