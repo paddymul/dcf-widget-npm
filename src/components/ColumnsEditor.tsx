@@ -130,7 +130,10 @@ export function DependentTabs({filledCommands}) {
 }
 
 export function ColumnsEditor(
-    {df, activeColumn}: {df: DFWhole; activeColumn: string} = {df: EmptyDf, activeColumn: 'stoptime'}
+    {df, activeColumn}: {df: DFWhole; activeColumn: string} = {
+        df: EmptyDf,
+        activeColumn: 'stoptime'
+    }
 ) {
     const schema = df.schema;
     const [commands, setCommands] = useState<Command[]>([]);

@@ -1,26 +1,36 @@
 import React, {Component, useState, useEffect, useReducer, useRef, useLayoutEffect} from 'react';
 import _ from 'lodash';
 import DataGrid from 'react-data-grid';
-import {sym, bakedCommands, ActualArg, ArgSpec, defaultCommandPatterns} from './CommandUtils';
+import {
+    sym,
+    bakedCommands,
+    Atom,
+    SetCommandFunc,
+    Command,
+    ActualArg,
+    SettableArg,
+    ArgSpec,
+    defaultCommandPatterns
+} from './CommandUtils';
 
 const nullSetter = () => 5;
 
-const replaceInArr = (arr: any[], old: any, subst: any) => {
-    return arr.map((item: any) => (item === old ? subst : item));
-};
+function replaceInArr<T>(arr: T[], old: T, subst: T): T[] {
+    return arr.map((item: T) => (item === old ? subst : item));
+}
 
-const replaceAtIdx = (arr: any[], idx: number, subst: any) => {
-    return arr.map((item: any, innerIdx: number) => (innerIdx === idx ? subst : item));
-};
+function replaceAtIdx<T>(arr: T[], idx: number, subst: T): T[] {
+    return arr.map((item: T, innerIdx: number) => (innerIdx === idx ? subst : item));
+}
 
-const replaceAtKey = (obj: Record<string, any>, key: string, subst: any) => {
+function replaceAtKey<T>(obj: Record<string, T>, key: string, subst: T): Record<string, T> {
     const objCopy = _.clone(obj);
     objCopy[key] = subst;
     return objCopy;
-};
+}
 
-const objWithoutNull = (obj: Record<string, any>, extraStrips: any[] = []) =>
-    _.pickBy(obj, (x) => ![null, undefined].includes(x));
+const objWithoutNull = (obj: Record<string, string>, extraStrips: string[] = []) =>
+    _.pickBy(obj, (x) => ![null, undefined, ...extraStrips].includes(x));
 
 export const CommandDetail = ({command, setCommand, deleteCB, columns, commandPatterns}) => {
     const commandName = command[0]['symbol'];
@@ -60,19 +70,19 @@ export const ArgGetters = ({
     columns,
     deleteCB
 }: {
-    command: any;
+    command: Command;
     fullPattern: ActualArg[];
-    setCommand: any;
+    setCommand: SetCommandFunc;
     columns: string[];
-    deleteCB: any;
+    deleteCB: () => void;
 }) => {
     const makeArgGetter = (pattern: ActualArg) => {
         const idx = pattern[0];
-        const val = command[idx];
-        const valSetter = (newVal: any) => {
+        const val = command[idx] as SettableArg;
+        const valSetter = (newVal) => {
             const newCommand = replaceAtIdx(command, idx, newVal);
             //console.log('newCommand', newCommand);
-            setCommand(newCommand);
+            setCommand(newCommand as Command);
         };
         return <ArgGetter argProps={pattern} val={val} setter={valSetter} columns={columns} />;
     };
@@ -91,19 +101,19 @@ const ArgGetter = ({
     columns
 }: {
     argProps: ActualArg;
-    val: any;
-    setter: any;
+    val: SettableArg;
+    setter: (arg: SettableArg) => void;
     columns: string[];
 }) => {
     const [argPos, label, argType, lastArg] = argProps;
 
-    const defaultShim = (event: any) => setter(event.target.value);
+    const defaultShim = (event) => setter(event.target.value);
     if (argType === 'enum') {
         return (
             <fieldset>
                 <label> {label} </label>
-                <select defaultValue={val} onChange={defaultShim}>
-                    {lastArg.map((optionVal: any) => (
+                <select defaultValue={val as string} onChange={defaultShim}>
+                    {lastArg.map((optionVal) => (
                         <option key={optionVal} value={optionVal}>
                             {optionVal}
                         </option>
@@ -113,11 +123,16 @@ const ArgGetter = ({
         );
     } else if (argType === 'type') {
         if (lastArg === 'integer') {
-            const valSetterShim = (event: any) => setter(parseInt(event.target.value));
+            const valSetterShim = (event) => setter(parseInt(event.target.value));
             return (
                 <fieldset>
                     <label> {label} </label>
-                    <input type='number' defaultValue={val} step='1' onChange={valSetterShim} />
+                    <input
+                        type='number'
+                        defaultValue={val as number}
+                        step='1'
+                        onChange={valSetterShim}
+                    />
                 </fieldset>
             );
         } else {
@@ -130,16 +145,22 @@ const ArgGetter = ({
         }
     } else if (argType === 'colEnum') {
         const widgetRow = columns.map((colName: string) => {
-            const colSetter = (event: any) => {
+            const colSetter = (event) => {
                 const newColVal = event.target.value;
-                const updatedColDict = replaceAtKey(val, colName, newColVal);
-                setter(objWithoutNull(updatedColDict, ['null']));
+                if (_.isString(newColVal)) {
+                    const updatedColDict = replaceAtKey(
+                        val as Record<string, string>,
+                        colName,
+                        newColVal as string
+                    ); // as Record<string, string>
+                    setter(objWithoutNull(updatedColDict, ['null']));
+                }
             };
             const colVal = _.get(val, colName, 'null');
             return (
                 <td>
                     <select defaultValue={colVal} onChange={colSetter}>
-                        {lastArg.map((optionVal: any) => (
+                        {lastArg.map((optionVal) => (
                             <option key={optionVal} value={optionVal}>
                                 {optionVal}
                             </option>
@@ -183,7 +204,7 @@ export const CommandAdder = ({column, addCommandCb, commandDefaults}) => {
             <fieldset>
                 <button> Column: {column}</button>
                 <label> Command Name </label>
-                {_.keys(commandDefaults).map((optionVal: any) => (
+                {_.keys(commandDefaults).map((optionVal) => (
                     <button onClick={addCommandByName(optionVal)}> {optionVal} </button>
                 ))}
             </fieldset>

@@ -29,6 +29,8 @@ export const symDf: SymbolDf = {
 export type ColEnumArgs = Record<string, string>;
 
 export type Atom = number | string | SymbolT | ColEnumArgs;
+export type SettableArg = number | string | ColEnumArgs;
+
 export type CommandSingleColumn = [SymbolT, SymbolDf, string];
 export type CommandSingleArg = [SymbolT, SymbolDf, string, Atom];
 export type CommandTwoArg = [SymbolT, SymbolDf, string, Atom, Atom];
