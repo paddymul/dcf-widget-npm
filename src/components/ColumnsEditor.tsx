@@ -4,6 +4,7 @@ import {requestDf} from './utils';
 import {DFViewer} from './DFViewer';
 import _ from 'lodash';
 import {CommandViewer} from './Commands';
+import {Command} from './CommandUtils';
 
 export function CommandDisplayer({filledCommands, style}) {
     const baseStyle = {margin: '0', textAlign: 'left'};
@@ -132,7 +133,7 @@ export function ColumnsEditor(
     {df, activeColumn}: {df: any; activeColumn: string} = {df: {}, activeColumn: 'stoptime'}
 ) {
     const schema = df.schema;
-    const [commands, setCommands] = useState([]);
+    const [commands, setCommands] = useState<Command[]>([]);
     const allColumns = df.schema.fields.map((field: any) => field.name);
     return (
         <div className='columns-editor' style={{width: '100%'}}>

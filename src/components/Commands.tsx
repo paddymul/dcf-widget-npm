@@ -1,7 +1,7 @@
 import React, {Component, useState, useEffect, useReducer, useRef, useLayoutEffect} from 'react';
 import _ from 'lodash';
 import DataGrid from 'react-data-grid';
-import {bakedCommands, defaultCommandConfig, Command} from './CommandUtils';
+import {bakedCommands, defaultCommandConfig, Command, SetCommandsFunc} from './CommandUtils';
 import {CommandDetail, CommandAdder} from './CommandDetail';
 
 export const CommandViewer = ({
@@ -11,14 +11,14 @@ export const CommandViewer = ({
     allColumns
 }: {
     commands: Command[];
-    setCommands: any;
+    setCommands: SetCommandsFunc;
     activeColumn: string;
     allColumns: string[];
 }) => {
     const rowElements = _.map(Array.from(commands.entries()), ([index, element]) => {
         const name = element[0]['symbol'];
         const key = name + index.toString();
-        const rowEl: Record<string, any> = {};
+        const rowEl: Record<string, string> = {};
         rowEl[key] = element[2];
         return rowEl;
     });
@@ -27,7 +27,7 @@ export const CommandViewer = ({
     const commandObjs = _.map(Array.from(commands.entries()), ([index, element]) => {
         const name = element[0]['symbol'];
         const key = name + index.toString();
-        const rowEl: Record<string, any> = {};
+        const rowEl: Record<string, Command> = {};
         rowEl[key] = element;
         return rowEl;
     });
@@ -36,7 +36,7 @@ export const CommandViewer = ({
     const idxObjs = _.map(Array.from(commands.entries()), ([index, element]) => {
         const name = element[0]['symbol'];
         const key = name + index.toString();
-        const rowEl: Record<string, any> = {};
+        const rowEl: Record<string, number> = {};
         rowEl[key] = index;
         return rowEl;
     });
@@ -80,7 +80,7 @@ export const CommandViewer = ({
                 }
             });
             setActiveKey('');
-            setCommands(_.filter(nextCommands));
+            setCommands(_.filter(nextCommands) as Command[]);
         };
     }
 

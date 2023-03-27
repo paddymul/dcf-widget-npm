@@ -34,6 +34,9 @@ export type CommandSingleArg = [SymbolT, SymbolDf, string, Atom];
 export type CommandTwoArg = [SymbolT, SymbolDf, string, Atom, Atom];
 export type Command = CommandSingleColumn | CommandSingleArg | CommandTwoArg;
 
+export type SetCommandFunc = (newCommand: Command) => void;
+export type SetCommandsFunc = (newCommands: Command[]) => void;
+
 export const defaultCommandPatterns: Record<string, ArgSpec[]> = {
     dropcol: [null],
     fillna: [[3, 'fillVal', 'type', 'integer']],
