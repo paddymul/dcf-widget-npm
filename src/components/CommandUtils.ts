@@ -1,13 +1,8 @@
 import _ from 'lodash';
 
 export const sym = (symbolName: string) => {
-    return {symbol: symbolName} 
+    return {symbol: symbolName};
 };
-export const bakedCommands = [
-    [sym('dropcol'), sym('df'), 'col1'],
-    [sym('fillna'), sym('df'), 'col2', 5],
-    [sym('resample'), sym('df'), 'month', 'monthly', {}]
-];
 
 const UnknownCommand = [sym('nonexistent'), sym('df'), 'col1'];
 
@@ -58,3 +53,9 @@ export const defaultCommandConfig = {
     commandPatterns: defaultCommandPatterns,
     commandDefaults
 };
+
+export const bakedCommands:Command[] = [
+    [sym('dropcol'), symDf, 'col1'],
+    [sym('fillna'), symDf, 'col2', 5],
+    [sym('resample'), symDf, 'month', 'monthly', {}]
+];
