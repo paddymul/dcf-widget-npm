@@ -12,7 +12,8 @@ const examples = {
     grid: {title: 'Custom Grid', file: 'CustomGrid'},
     pagination: {title: 'Pagination', file: 'Pagination'},
     custom: {title: 'Custom Field', file: 'CustomField'},
-    reordering: {title: 'Reordering', file: 'Reordering'}
+    reordering: {title: 'Reordering', file: 'Reordering'},
+    DCFCell: {title: 'DCFCell', file: 'DCFCell'}
 };
 
 // The examples use a code-loading technique that I have described in
