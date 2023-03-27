@@ -1,5 +1,5 @@
 import React, {Component, useState, useEffect} from 'react';
-import {tableDf, DFWhole} from './staticData';
+import {tableDf, DFWhole, EmptyDf} from './staticData';
 import {requestDf} from './utils';
 import {DFViewer} from './DFViewer';
 import _ from 'lodash';
@@ -79,7 +79,7 @@ export function TransformViewer({filledCommands, style}) {
 export function DependentTabs({filledCommands}) {
     const [tab, _setTab] = useState('df');
     const setTab = (tabName: string) => {
-        const retFunc = (e: any) => {
+        const retFunc = () => {
             _setTab(tabName);
         };
         return retFunc;
@@ -130,11 +130,11 @@ export function DependentTabs({filledCommands}) {
 }
 
 export function ColumnsEditor(
-    {df, activeColumn}: {df: any; activeColumn: string} = {df: {}, activeColumn: 'stoptime'}
+    {df, activeColumn}: {df: DFWhole; activeColumn: string} = {df: EmptyDf, activeColumn: 'stoptime'}
 ) {
     const schema = df.schema;
     const [commands, setCommands] = useState<Command[]>([]);
-    const allColumns = df.schema.fields.map((field: any) => field.name);
+    const allColumns = df.schema.fields.map((field) => field.name);
     return (
         <div className='columns-editor' style={{width: '100%'}}>
             <CommandViewer
