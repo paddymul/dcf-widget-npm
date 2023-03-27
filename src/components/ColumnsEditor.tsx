@@ -1,5 +1,5 @@
 import React, {Component, useState, useEffect} from 'react';
-import {tableDf} from './staticData';
+import {tableDf, DFWhole} from './staticData';
 import {requestDf} from './utils';
 import {DFViewer} from './DFViewer';
 import _ from 'lodash';
@@ -51,7 +51,7 @@ const transformInstructions = (raw) => {
 };
 
 export function TransformViewer({filledCommands, style}) {
-    const [transDf, setTransDf] = useState(tableDf);
+    const [transDf, setTransDf] = useState<DFWhole>(tableDf);
     const URLBase = 'http://localhost:5000/dcf/';
     const sliceArgs = 'slice_start=3&slice_end=50';
 

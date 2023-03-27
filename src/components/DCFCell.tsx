@@ -1,12 +1,12 @@
 import React, {Component, useState, useEffect} from 'react';
 import _ from 'lodash';
 import {ColumnsEditor} from './ColumnsEditor';
-import {tableDf, convertTableDF, columns, rows} from './staticData';
+import {tableDf, convertTableDF, columns, rows, DFWhole} from './staticData';
 import {DFViewer} from './DFViewer';
 import {requestDf} from './utils';
 
 export function DCFCell() {
-    const [origDf, setOrigDf] = useState(tableDf);
+    const [origDf, setOrigDf] = useState<DFWhole>(tableDf);
     useEffect(() => {
         requestDf('http://localhost:5000/dcf/df/1?slice_end=50', setOrigDf);
     }, []);

@@ -1,10 +1,14 @@
 import 'react-data-grid/lib/styles.css';
 import React, {Component, useState, useEffect} from 'react';
 import _ from 'lodash';
-import DataGrid, {Column} from 'react-data-grid';
+import DataGrid, {Column, CellClickArgs} from 'react-data-grid';
 import {convertTableDF, DFWhole, EmptyDf} from './staticData';
 
-const updateAtMatch = (cols: Record<string, any>[], key: string, subst: any) => {
+const updateAtMatch = (
+    cols: Column<unknown, unknown>[],
+    key: string,
+    subst: Record<string, string>
+) => {
     const retColumns = cols.map((x) => {
         if (x.key === key) {
             return {...x, ...subst};
@@ -15,13 +19,21 @@ const updateAtMatch = (cols: Record<string, any>[], key: string, subst: any) => 
     return retColumns;
 };
 
+export type setColumFunc = (newCol: string) => void;
+export type StyleAnalogue = Record<string, string | number>;
+
 export function DFViewer(
     {
         df,
         style,
         activeCol,
         setActiveCol
-    }: {df: DFWhole; style?: Record<string, any>; activeCol?: string; setActiveCol?: any} = {
+    }: {
+        df: DFWhole;
+        style?: StyleAnalogue;
+        activeCol?: string;
+        setActiveCol?: setColumFunc;
+    } = {
         df: EmptyDf,
         style: {height: '300px'},
         setActiveCol: () => null
@@ -38,8 +50,16 @@ export function DFViewer(
             style={localStyle}
             columns={styledColumns}
             rows={localRows}
-            onCellClick={({row, column}: any, event: any) => {
-                setActiveCol(column.key);
+            onCellClick={({row, column}, event) => {
+                if (
+                    setActiveCol === undefined ||
+                    column === undefined ||
+                    column.key === undefined
+                ) {
+                    return;
+                } else {
+                    setActiveCol(column.key);
+                }
             }}
         />
     );
