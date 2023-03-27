@@ -22,7 +22,6 @@ const replaceAtKey = (obj: Record<string, any>, key: string, subst: any) => {
 const objWithoutNull = (obj: Record<string, any>, extraStrips: any[] = []) =>
     _.pickBy(obj, (x) => ![null, undefined].includes(x));
 
-//@ts-ignore
 export const CommandDetail = ({command, setCommand, deleteCB, columns, commandPatterns}) => {
     const commandName = command[0]['symbol'];
     const pattern = commandPatterns[commandName];
@@ -54,7 +53,6 @@ export const CommandDetail = ({command, setCommand, deleteCB, columns, commandPa
     return <h2></h2>;
 };
 
-//@ts-ignore
 export const ArgGetters = ({
     command,
     fullPattern,
@@ -73,7 +71,7 @@ export const ArgGetters = ({
         const val = command[idx];
         const valSetter = (newVal: any) => {
             const newCommand = replaceAtIdx(command, idx, newVal);
-            console.log('newCommand', newCommand);
+            //console.log('newCommand', newCommand);
             setCommand(newCommand);
         };
         return <ArgGetter argProps={pattern} val={val} setter={valSetter} columns={columns} />;
@@ -86,7 +84,6 @@ export const ArgGetters = ({
     );
 };
 
-//@ts-ignore
 const ArgGetter = ({
     argProps,
     val,
@@ -98,7 +95,6 @@ const ArgGetter = ({
     setter: any;
     columns: string[];
 }) => {
-    //@ts-ignore
     const [argPos, label, argType, lastArg] = argProps;
 
     const defaultShim = (event: any) => setter(event.target.value);
@@ -107,7 +103,6 @@ const ArgGetter = ({
             <fieldset>
                 <label> {label} </label>
                 <select defaultValue={val} onChange={defaultShim}>
-                    //@ts-ignore
                     {lastArg.map((optionVal: any) => (
                         <option key={optionVal} value={optionVal}>
                             {optionVal}
@@ -144,7 +139,6 @@ const ArgGetter = ({
             return (
                 <td>
                     <select defaultValue={colVal} onChange={colSetter}>
-                        //@ts-ignore
                         {lastArg.map((optionVal: any) => (
                             <option key={optionVal} value={optionVal}>
                                 {optionVal}
@@ -176,9 +170,7 @@ const ArgGetter = ({
     }
 };
 
-//@ts-ignore
 export const CommandAdder = ({column, addCommandCb, commandDefaults}) => {
-    //@ts-ignore
     const addCommandByName = (localCommandName: string) => {
         return () => {
             const defaultCommand = commandDefaults[localCommandName];
@@ -199,7 +191,6 @@ export const CommandAdder = ({column, addCommandCb, commandDefaults}) => {
     );
 };
 
-//@ts-ignore
 export const CommandDetailHarness = () => {
     const activeCommand = bakedCommands[0];
     return (
