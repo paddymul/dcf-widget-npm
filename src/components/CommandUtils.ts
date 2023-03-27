@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 export const sym = (symbolName: string) => {
-    return {symbol: symbolName} as symbol;
+    return {symbol: symbolName} 
 };
 export const bakedCommands = [
     [sym('dropcol'), sym('df'), 'col1'],
@@ -19,7 +19,7 @@ export type NoArgs = null;
 export type ActualArg = TypeSpec | EnumSpec | ColEnumSpec;
 export type ArgSpec = TypeSpec | EnumSpec | ColEnumSpec | NoArgs;
 
-export interface Symbol {
+export interface SymbolT {
     symbol: string;
 }
 
@@ -33,10 +33,10 @@ export const symDf: SymbolDf = {
 
 export type ColEnumArgs = Record<string, string>;
 
-export type Atom = number | string | symbol | ColEnumArgs;
-export type CommandSingleColumn = [symbol, SymbolDf, string];
-export type CommandSingleArg = [symbol, SymbolDf, string, Atom];
-export type CommandTwoArg = [symbol, SymbolDf, string, Atom, Atom];
+export type Atom = number | string | SymbolT | ColEnumArgs;
+export type CommandSingleColumn = [SymbolT, SymbolDf, string];
+export type CommandSingleArg = [SymbolT, SymbolDf, string, Atom];
+export type CommandTwoArg = [SymbolT, SymbolDf, string, Atom, Atom];
 export type Command = CommandSingleColumn | CommandSingleArg | CommandTwoArg;
 
 export const defaultCommandPatterns: Record<string, ArgSpec[]> = {
