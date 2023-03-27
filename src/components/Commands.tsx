@@ -45,7 +45,7 @@ export const CommandViewer = ({
     // previously was null
     const [activeKey, setActiveKey] = useState('');
 
-    const getColumns = (passedCommands: any[]) =>
+    const getColumns = (passedCommands: Command[]) =>
         _.map(Array.from(passedCommands.entries()), ([index, element]) => {
             const name = element[0]['symbol'];
             const key = name + index.toString();
@@ -55,8 +55,8 @@ export const CommandViewer = ({
 
     const columns = getColumns(commands);
 
-    function getSetCommand(key: any) {
-        return (newCommand: any) => {
+    function getSetCommand(key: string) {
+        return (newCommand: Command) => {
             const index = keyToIdx[key];
             const nextCommands = commands.map((c, i) => {
                 if (i === index) {
@@ -69,8 +69,8 @@ export const CommandViewer = ({
         };
     }
 
-    function getDeleteCommand(key: any) {
-        return (newCommand: any) => {
+    function getDeleteCommand(key: string) {
+        return (newCommand: Command) => {
             const index = keyToIdx[key];
             const nextCommands = commands.map((c, i) => {
                 if (i === index) {
@@ -84,7 +84,7 @@ export const CommandViewer = ({
         };
     }
 
-    const addCommand = (newCommand: any) => {
+    const addCommand = (newCommand: Command) => {
         const newCommandArr = [...commands, newCommand];
         setCommands(newCommandArr);
         const newCommandKey = getColumns(newCommandArr)[newCommandArr.length - 1].key;
@@ -114,7 +114,7 @@ export const CommandViewer = ({
                     style={{width: '1200px', height: '80px'}}
                     columns={columns}
                     rows={rows}
-                    onCellClick={({row, column}: any, event: any) => {
+                    onCellClick={({row, column}) => {
                         // add to generated commands
                         const tempRow = _.clone(rows[0]);
                         const oldVal = tempRow[column.key];
