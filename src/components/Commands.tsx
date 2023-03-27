@@ -15,7 +15,6 @@ export const CommandViewer = ({
     activeColumn: string;
     allColumns: string[];
 }) => {
-    //@ts-ignore
     const rowElements = _.map(Array.from(commands.entries()), ([index, element]) => {
         const name = element[0]['symbol'];
         const key = name + index.toString();
@@ -25,7 +24,6 @@ export const CommandViewer = ({
     });
     const rows = [_.merge({}, ...rowElements)];
 
-    //@ts-ignore
     const commandObjs = _.map(Array.from(commands.entries()), ([index, element]) => {
         const name = element[0]['symbol'];
         const key = name + index.toString();
@@ -35,7 +33,6 @@ export const CommandViewer = ({
     });
     const commandDict = _.merge({}, ...commandObjs);
 
-    //@ts-ignore
     const idxObjs = _.map(Array.from(commands.entries()), ([index, element]) => {
         const name = element[0]['symbol'];
         const key = name + index.toString();
@@ -45,7 +42,8 @@ export const CommandViewer = ({
     });
     const keyToIdx = _.merge({}, ...idxObjs);
 
-    const [activeKey, setActiveKey] = useState(null);
+    // previously was null
+    const [activeKey, setActiveKey] = useState('');
 
     const getColumns = (passedCommands: any[]) =>
         _.map(Array.from(passedCommands.entries()), ([index, element]) => {
@@ -60,7 +58,6 @@ export const CommandViewer = ({
     function getSetCommand(key: any) {
         return (newCommand: any) => {
             const index = keyToIdx[key];
-            //@ts-ignore
             const nextCommands = commands.map((c, i) => {
                 if (i === index) {
                     return newCommand;
@@ -75,7 +72,6 @@ export const CommandViewer = ({
     function getDeleteCommand(key: any) {
         return (newCommand: any) => {
             const index = keyToIdx[key];
-            //@ts-ignore
             const nextCommands = commands.map((c, i) => {
                 if (i === index) {
                     return undefined;
@@ -83,7 +79,7 @@ export const CommandViewer = ({
                     return c;
                 }
             });
-            setActiveKey(null);
+            setActiveKey('');
             setCommands(_.filter(nextCommands));
         };
     }
@@ -92,7 +88,6 @@ export const CommandViewer = ({
         const newCommandArr = [...commands, newCommand];
         setCommands(newCommandArr);
         const newCommandKey = getColumns(newCommandArr)[newCommandArr.length - 1].key;
-        //@ts-ignore
         setActiveKey(newCommandKey);
     };
 
@@ -117,16 +112,13 @@ export const CommandViewer = ({
                 <h4> Commands </h4>
                 <DataGrid
                     style={{width: '1200px', height: '80px'}}
-                    //@ts-ignore
                     columns={columns}
                     rows={rows}
                     onCellClick={({row, column}: any, event: any) => {
-                        console.log('column', column.key);
                         // add to generated commands
                         const tempRow = _.clone(rows[0]);
                         const oldVal = tempRow[column.key];
                         tempRow[column.key] = oldVal == 'false' ? 'true' : 'false';
-                        //@ts-ignore
                         setActiveKey(column.key);
                     }}
                 />

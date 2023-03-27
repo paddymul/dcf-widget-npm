@@ -54,7 +54,7 @@ export const defaultCommandConfig = {
     commandDefaults
 };
 
-export const bakedCommands:Command[] = [
+export const bakedCommands: Command[] = [
     [sym('dropcol'), symDf, 'col1'],
     [sym('fillna'), symDf, 'col2', 5],
     [sym('resample'), symDf, 'month', 'monthly', {}]
