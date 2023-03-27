@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 export const sym = (symbolName: string) => {
-    return {symbol: symbolName};
+    return {symbol: symbolName} as symbol;
 };
 export const bakedCommands = [
     [sym('dropcol'), sym('df'), 'col1'],
@@ -23,12 +23,20 @@ export interface Symbol {
     symbol: string;
 }
 
+export interface SymbolDf {
+    symbol: 'df';
+}
+
+export const symDf: SymbolDf = {
+    symbol: 'df'
+};
+
 export type ColEnumArgs = Record<string, string>;
 
 export type Atom = number | string | symbol | ColEnumArgs;
-export type CommandSingleColumn = [symbol, {symbol: 'df'}, string];
-export type CommandSingleArg = [symbol, {symbol: 'df'}, string, Atom];
-export type CommandTwoArg = [symbol, {symbol: 'df'}, string, Atom, Atom];
+export type CommandSingleColumn = [symbol, SymbolDf, string];
+export type CommandSingleArg = [symbol, SymbolDf, string, Atom];
+export type CommandTwoArg = [symbol, SymbolDf, string, Atom, Atom];
 export type Command = CommandSingleColumn | CommandSingleArg | CommandTwoArg;
 
 export const defaultCommandPatterns: Record<string, ArgSpec[]> = {
@@ -41,9 +49,9 @@ export const defaultCommandPatterns: Record<string, ArgSpec[]> = {
 };
 
 export const commandDefaults: Record<string, Command> = {
-    dropcol: [sym('dropcol'), sym('df'), 'col'],
-    fillna: [sym('fillna'), sym('df'), 'col', 8],
-    resample: [sym('resample'), sym('df'), 'col', 'monthly', {}]
+    dropcol: [sym('dropcol'), symDf, 'col'],
+    fillna: [sym('fillna'), symDf, 'col', 8],
+    resample: [sym('resample'), symDf, 'col', 'monthly', {}]
 };
 
 export const defaultCommandConfig = {
