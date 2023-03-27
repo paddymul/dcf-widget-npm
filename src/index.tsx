@@ -4,3 +4,5 @@ export {Row, Schema, Props, Element} from './base';
 export {default as ReactEditList} from './EditList';
 
 export default ReactEditList;
+
+export {DCFCell} from './components/DCFCell';

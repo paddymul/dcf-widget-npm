@@ -4,10 +4,8 @@ import {ColumnsEditor} from './ColumnsEditor';
 import {tableDf, convertTableDF, columns, rows} from './staticData';
 import {DFViewer} from './DFViewer';
 import {requestDf} from './utils';
-import {useNavigate} from 'react-router-dom';
 
 export function DCFCell() {
-    const navigate = useNavigate();
     const [origDf, setOrigDf] = useState(tableDf);
     useEffect(() => {
         requestDf('http://localhost:5000/dcf/df/1?slice_end=50', setOrigDf);
