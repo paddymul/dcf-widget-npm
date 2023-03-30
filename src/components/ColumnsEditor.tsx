@@ -47,11 +47,12 @@ export function PythonDisplayer({filledCommands, style}) {
     );
 }
 
-const transformInstructions = (raw) => {
-    return JSON.stringify([{symbol: 'begin'}, ...raw]);
-};
+const makeFullInstructions = (raw) => [{symbol: 'begin'}, ...raw]
+const EmptyInstructions = makeFullInstructions([])
+const transformInstructions = (raw) =>  JSON.stringify(raw)
 
-export function TransformViewer({filledCommands, style}) {
+
+export function TransformViewerOld({filledCommands, style}) {
     const [transDf, setTransDf] = useState<DFWhole>(tableDf);
     const URLBase = 'http://localhost:5000/dcf/';
     const sliceArgs = 'slice_start=3&slice_end=50';
@@ -76,7 +77,46 @@ export function TransformViewer({filledCommands, style}) {
     );
 }
 
-export function DependentTabs({filledCommands}) {
+const serverGetTransformRequester = (setDf) => {
+  const baseRequestTransform = (passedInstructions) => {
+    const URLBase = 'http://localhost:5000/dcf/';
+    const sliceArgs = 'slice_start=3&slice_end=50';
+
+    const emptyUrl = `${URLBase}df/1?${sliceArgs}`;
+    const instructions = transformInstructions(passedInstructions);
+    const transUrl = `${URLBase}transform_df/1?instructions=${instructions}&${sliceArgs}`;
+    if (_.isEqual(passedInstructions, EmptyInstructions)) {
+      requestDf(emptyUrl, setDf);
+    } else {
+      requestDf(transUrl, setDf);
+    }
+  }
+  return baseRequestTransform
+}
+
+export function TransformViewer(
+  {filledCommands, style, getTransformRequester}) {
+  const [transDf, setTransDf] = useState<DFWhole>(tableDf);
+  const transformRequester = getTransformRequester(setTransDf)
+
+  const fullInstructions = makeFullInstructions(filledCommands)
+
+    useEffect(() => {
+      transformRequester(fullInstructions)
+    }, [filledCommands]);
+    return (
+        <div className='transform-viewer'>
+            {' '}
+            <DFViewer style={style} df={transDf} />{' '}
+        </div>
+    );
+}
+
+
+export function DependentTabs({filledCommands, getTransformRequester}) {
+  console.log("dependenttabs, getTransformRequester2", getTransformRequester)
+  console.log("dependenttabs, getTransformRequester", getTransformRequester("asdf"))
+
     const [tab, _setTab] = useState('df');
     const setTab = (tabName: string) => {
         const retFunc = () => {
@@ -121,7 +161,7 @@ export function DependentTabs({filledCommands}) {
                     {
                         command: <CommandDisplayer style={style} filledCommands={filledCommands} />,
                         python: <PythonDisplayer style={style} filledCommands={filledCommands} />,
-                        df: <TransformViewer style={style} filledCommands={filledCommands} />
+                      df: <TransformViewer style={style} filledCommands={filledCommands} getTransformRequester={getTransformRequester} />
                     }[tab]
                 }
             </div>
@@ -138,6 +178,8 @@ export function ColumnsEditor(
     const schema = df.schema;
     const [commands, setCommands] = useState<Command[]>([]);
     const allColumns = df.schema.fields.map((field) => field.name);
+    //const getTransformrequester = serverGetTransformRequester;
+  console.log("ColumnsEditor getTransformrequester", serverGetTransformRequester('asdf'))
     return (
         <div className='columns-editor' style={{width: '100%'}}>
             <CommandViewer
@@ -146,8 +188,8 @@ export function ColumnsEditor(
                 activeColumn={activeColumn}
                 allColumns={allColumns}
             />
-
-            <DependentTabs filledCommands={commands} />
+          <DependentTabs filledCommands={commands} getTransformRequester={serverGetTransformRequester} />
         </div>
     );
 }
+
