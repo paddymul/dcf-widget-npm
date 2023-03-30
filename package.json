@@ -1,6 +1,6 @@
 {
   "name": "paddy-react-edit-list",
-  "version": "1.1.1",
+  "version": "1.1.6",
   "description": "Universal Editable List React Component",
   "main": "index.js",
   "types": "index.d.ts",
@@ -47,13 +47,11 @@
     "dependencies": {
         "@types/lodash": "^4.14.191",
         "lodash": "^4.17.21",
-	"react-data-grid": "^7.0.0-beta.22"
+	"react-data-grid": "^7.0.0-beta.22",
+	"react": "^18.0.0",
+	"react-dom": "^18.0.0"
     },
-  "peerDependencies": {
-    "react": ">=16.8",
-    "react-dom": ">=16.8"
 
-  },
   "devDependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/plugin-transform-async-to-generator": "7.16.8",
@@ -100,11 +98,10 @@
     "prism-themes": "^1.6.0",
     "prismjs": "^1.28.0",
     "raw-loader": "^4.0.2",
-    "react": "^18.0.0",
     "react-bootstrap": "^2.0.0",
     "react-day-picker": "^8.0.4",
     "react-docgen-typescript": "^2.1.0",
-    "react-dom": "^18.0.0",
+
     "react-router": "^6.3.0",
     "react-router-dom": "^5.2.0",
     "react-test-renderer": "^18.0.0",

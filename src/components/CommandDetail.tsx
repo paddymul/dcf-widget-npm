@@ -226,8 +226,3 @@ export const CommandDetailHarness = () => {
         </div>
     );
 };
-
-/*
-
-
-  */
