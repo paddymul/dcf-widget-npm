@@ -51,32 +51,6 @@ const makeFullInstructions = (raw) => [{symbol: 'begin'}, ...raw]
 const EmptyInstructions = makeFullInstructions([])
 const transformInstructions = (raw) =>  JSON.stringify(raw)
 
-
-export function TransformViewerOld({filledCommands, style}) {
-    const [transDf, setTransDf] = useState<DFWhole>(tableDf);
-    const URLBase = 'http://localhost:5000/dcf/';
-    const sliceArgs = 'slice_start=3&slice_end=50';
-
-    useEffect(() => {
-        const emptyUrl = `${URLBase}df/1?${sliceArgs}`;
-        const instructions = transformInstructions(filledCommands);
-        //console.log('filledCommands', filledCommands);
-        //console.log('instructions', instructions);
-        const transUrl = `${URLBase}transform_df/1?instructions=${instructions}&${sliceArgs}`;
-        if (filledCommands.length == 0) {
-            requestDf(emptyUrl, setTransDf);
-        } else {
-            requestDf(transUrl, setTransDf);
-        }
-    }, [filledCommands]);
-    return (
-        <div className='transform-viewer'>
-            {' '}
-            <DFViewer style={style} df={transDf} />{' '}
-        </div>
-    );
-}
-
 const serverGetTransformRequester = (setDf) => {
   const baseRequestTransform = (passedInstructions) => {
     const URLBase = 'http://localhost:5000/dcf/';
