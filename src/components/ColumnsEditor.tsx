@@ -4,7 +4,7 @@ import {requestDf} from './utils';
 import {DFViewer} from './DFViewer';
 import _ from 'lodash';
 import {CommandViewer} from './Commands';
-import {Command} from './CommandUtils';
+import {Command, CommandConfigT, defaultCommandConfig} from './CommandUtils';
 
 export function CommandDisplayer({filledCommands, style}) {
     const baseStyle = {margin: '0', textAlign: 'left'};
@@ -148,15 +148,23 @@ export function ColumnsEditor(
     {
         df,
         activeColumn,
-        getTransformRequester
-    }: {df: DFWhole; activeColumn: string; getTransformRequester: unknown} = {
+        getTransformRequester,
+        commandConfig
+    }: {
+        df: DFWhole;
+        activeColumn: string;
+        getTransformRequester: unknown;
+        commandConfig: CommandConfigT;
+    } = {
         df: EmptyDf,
         activeColumn: 'stoptime',
-        getTransformRequester: serverGetTransformRequester
+        getTransformRequester: serverGetTransformRequester,
+        commandConfig: defaultCommandConfig
     }
 ) {
     const schema = df.schema;
     const [commands, setCommands] = useState<Command[]>([]);
+
     const allColumns = df.schema.fields.map((field) => field.name);
     return (
         <div className='columns-editor' style={{width: '100%'}}>
@@ -165,6 +173,7 @@ export function ColumnsEditor(
                 setCommands={setCommands}
                 activeColumn={activeColumn}
                 allColumns={allColumns}
+                commandConfig={commandConfig}
             />
             <DependentTabs
                 filledCommands={commands}

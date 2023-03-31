@@ -39,7 +39,9 @@ export type Command = CommandSingleColumn | CommandSingleArg | CommandTwoArg;
 export type SetCommandFunc = (newCommand: Command) => void;
 export type SetCommandsFunc = (newCommands: Command[]) => void;
 
-export const defaultCommandPatterns: Record<string, ArgSpec[]> = {
+export type CommandDefaultArgSpec = Record<string, ArgSpec[]>;
+export type CommandDefaultArgs = Record<string, Command>;
+export const defaultCommandPatterns: CommandDefaultArgSpec = {
     dropcol: [null],
     fillna: [[3, 'fillVal', 'type', 'integer']],
     resample: [
@@ -48,13 +50,18 @@ export const defaultCommandPatterns: Record<string, ArgSpec[]> = {
     ]
 };
 
-export const commandDefaults: Record<string, Command> = {
+export const commandDefaults: CommandDefaultArgs = {
     dropcol: [sym('dropcol'), symDf, 'col'],
     fillna: [sym('fillna'), symDf, 'col', 8],
     resample: [sym('resample'), symDf, 'col', 'monthly', {}]
 };
 
-export const defaultCommandConfig = {
+export type CommandConfigT = {
+    commandPatterns: CommandDefaultArgSpec;
+    commandDefaults: CommandDefaultArgs;
+};
+
+export const defaultCommandConfig: CommandConfigT = {
     commandPatterns: defaultCommandPatterns,
     commandDefaults
 };

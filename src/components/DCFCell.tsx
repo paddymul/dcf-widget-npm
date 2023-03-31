@@ -3,12 +3,21 @@ import _ from 'lodash';
 import {ColumnsEditor, serverGetTransformRequester} from './ColumnsEditor';
 import {tableDf, convertTableDF, columns, rows, DFWhole} from './staticData';
 import {DFViewer} from './DFViewer';
+import {CommandConfigT, defaultCommandConfig} from './CommandUtils';
 import {requestDf} from './utils';
 
 export function DCFCell() {
     const [origDf, setOrigDf] = useState<DFWhole>(tableDf);
     useEffect(() => {
         requestDf('http://localhost:5000/dcf/df/1?slice_end=50', setOrigDf);
+    }, []);
+
+    const [commandConfig, setCommandConfig] = useState(defaultCommandConfig);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/dcf/command-config').then(async (response) => {
+            setCommandConfig(await response.json());
+        });
     }, []);
 
     const [activeCol, setActiveCol] = useState('stoptime');
@@ -24,6 +33,7 @@ export function DCFCell() {
                 df={origDf}
                 activeColumn={activeCol}
                 getTransformRequester={serverGetTransformRequester}
+                commandConfig={commandConfig}
             />
         </div>
     );
@@ -32,7 +42,15 @@ export function DCFCell() {
 /*
   Widget DCFCell is meant to be used with callback functions and passed values, not explicit http calls
  */
-export function WidgetDCFCell(origDf: DFWhole, getTransformRequester: unknown) {
+export function WidgetDCFCell({
+    origDf,
+    getTransformRequester,
+    commandConfig
+}: {
+    origDf: DFWhole;
+    getTransformRequester: unknown;
+    commandConfig: CommandConfigT;
+}) {
     const [activeCol, setActiveCol] = useState('stoptime');
     return (
         <div className='dcf-root flex flex-col' style={{width: '100%', height: '100%'}}>
@@ -46,6 +64,7 @@ export function WidgetDCFCell(origDf: DFWhole, getTransformRequester: unknown) {
                 df={origDf}
                 activeColumn={activeCol}
                 getTransformRequester={getTransformRequester}
+                commandConfig={commandConfig}
             />
         </div>
     );

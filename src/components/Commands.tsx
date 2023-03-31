@@ -1,19 +1,27 @@
 import React, {Component, useState, useEffect, useReducer, useRef, useLayoutEffect} from 'react';
 import _ from 'lodash';
 import DataGrid from 'react-data-grid';
-import {bakedCommands, defaultCommandConfig, Command, SetCommandsFunc} from './CommandUtils';
+import {
+    bakedCommands,
+    defaultCommandConfig,
+    Command,
+    SetCommandsFunc,
+    CommandConfigT
+} from './CommandUtils';
 import {CommandDetail, CommandAdder} from './CommandDetail';
 
 export const CommandViewer = ({
     commands,
     setCommands,
     activeColumn,
-    allColumns
+    allColumns,
+    commandConfig
 }: {
     commands: Command[];
     setCommands: SetCommandsFunc;
     activeColumn: string;
     allColumns: string[];
+    commandConfig: CommandConfigT;
 }) => {
     const rowElements = _.map(Array.from(commands.entries()), ([index, element]) => {
         const name = element[0]['symbol'];
@@ -91,14 +99,6 @@ export const CommandViewer = ({
         setActiveKey(newCommandKey);
     };
 
-    const [commandConfig, setCommandConfig] = useState(defaultCommandConfig);
-
-    useEffect(() => {
-        fetch('http://localhost:5000/dcf/command-config').then(async (response) => {
-            setCommandConfig(await response.json());
-        });
-    }, []);
-
     const {commandPatterns, commandDefaults} = commandConfig;
 
     return (
@@ -138,6 +138,14 @@ export const CommandViewer = ({
 
 export const Commands = () => {
     const [c, setC] = useState(bakedCommands);
+    const [commandConfig, setCommandConfig] = useState(defaultCommandConfig);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/dcf/command-config').then(async (response) => {
+            setCommandConfig(await response.json());
+        });
+    }, []);
+
     return (
         <div style={{width: '100%', height: '100%'}}>
             <CommandViewer
@@ -145,6 +153,7 @@ export const Commands = () => {
                 setCommands={setC}
                 activeColumn={'new-column2'}
                 allColumns={['foo-col', 'bar-col', 'baz-col']}
+                commandConfig={commandConfig}
             />
             <code style={{fontSize: '1em', textAlign: 'left'}}>
                 {' '}
