@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, {Component, useState, useEffect, Dispatch, SetStateAction} from 'react';
 import _ from 'lodash';
 import {ColumnsEditor, serverGetTransformRequester} from './ColumnsEditor';
 import {tableDf, convertTableDF, columns, rows, DFWhole} from './staticData';
@@ -39,19 +39,26 @@ export function DCFCell() {
     );
 }
 
+export type CommandConfigSetterT = (setter: Dispatch<SetStateAction<CommandConfigT>>) => void;
+
 /*
   Widget DCFCell is meant to be used with callback functions and passed values, not explicit http calls
  */
 export function WidgetDCFCell({
     origDf,
     getTransformRequester,
-    commandConfig
+    commandConfig,
+    exposeCommandConfigSetter
 }: {
     origDf: DFWhole;
     getTransformRequester: unknown;
     commandConfig: CommandConfigT;
+    exposeCommandConfigSetter: CommandConfigSetterT;
 }) {
+    const [activeCommandConfig, setCommandConfig] = useState(commandConfig);
+    exposeCommandConfigSetter(setCommandConfig);
     const [activeCol, setActiveCol] = useState('stoptime');
+
     return (
         <div className='dcf-root flex flex-col' style={{width: '100%', height: '100%'}}>
             <h1 style={{fontSize: '1.25rem', margin: '5px', textAlign: 'left'}}>
@@ -64,7 +71,7 @@ export function WidgetDCFCell({
                 df={origDf}
                 activeColumn={activeCol}
                 getTransformRequester={getTransformRequester}
-                commandConfig={commandConfig}
+                commandConfig={activeCommandConfig}
             />
         </div>
     );
