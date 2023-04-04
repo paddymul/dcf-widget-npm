@@ -16,28 +16,13 @@ export function CommandDisplayer({filledCommands, style}) {
     );
 }
 
-export function PythonDisplayer({filledCommands, style}) {
+export function PythonDisplayer({filledCommands, style, getPyRequester}) {
     const [pyString, setPyString] = useState('');
-
-    const URLBase = 'http://localhost:5000/dcf/';
-    const sliceArgs = 'slice_start=3&slice_end=50';
-    const emptyUrl = `${URLBase}df/1?${sliceArgs}`;
+    const pyRequester = getPyRequester(setPyString);
 
     useEffect(() => {
-        const pyCodeUrl = `${URLBase}dcf_to_py/1?instructions=${JSON.stringify(filledCommands)}`;
-        if (filledCommands.length == 0) {
-            return;
-        } else {
-            fetch(pyCodeUrl).then(async (response) => {
-                //console.log(response);
-                const fullResp = await response.json();
-                //console.log('fullResp', fullResp);
-                const pyCode = fullResp['py'];
-                //console.log('pyCode', pyCode);
-                setPyString(pyCode);
-            });
-        }
-    }, [filledCommands]);
+        pyRequester(filledCommands);
+    }, [filledCommands, getPyRequester, pyRequester]);
     const baseStyle = {margin: '0', textAlign: 'left'};
     const localStyle = {...baseStyle, ...style};
     return (
@@ -46,6 +31,24 @@ export function PythonDisplayer({filledCommands, style}) {
         </div>
     );
 }
+
+export const serverGetPyRequester = (setPyString) => {
+    const baseGetPy = (instructions: Command[]) => {
+        const URLBase = 'http://localhost:5000/dcf/';
+        const pyCodeUrl = `${URLBase}dcf_to_py/1?instructions=${JSON.stringify(instructions)}`;
+        if (instructions.length == 0) {
+            setPyString('');
+            return;
+        } else {
+            fetch(pyCodeUrl).then(async (response) => {
+                const fullResp = await response.json();
+                const pyCode = fullResp['py'];
+                setPyString(pyCode);
+            });
+        }
+    };
+    return baseGetPy;
+};
 
 const makeFullInstructions = (raw) => [{symbol: 'begin'}, ...raw];
 const EmptyInstructions = makeFullInstructions([]);
@@ -85,7 +88,7 @@ export function TransformViewer({filledCommands, style, getTransformRequester}) 
     );
 }
 
-export function DependentTabs({filledCommands, getTransformRequester}) {
+export function DependentTabs({filledCommands, getTransformRequester, getPyRequester}) {
     const [tab, _setTab] = useState('df');
     const setTab = (tabName: string) => {
         const retFunc = () => {
@@ -129,7 +132,13 @@ export function DependentTabs({filledCommands, getTransformRequester}) {
                 {
                     {
                         command: <CommandDisplayer style={style} filledCommands={filledCommands} />,
-                        python: <PythonDisplayer style={style} filledCommands={filledCommands} />,
+                        python: (
+                            <PythonDisplayer
+                                style={style}
+                                filledCommands={filledCommands}
+                                getPyRequester={getPyRequester}
+                            />
+                        ),
                         df: (
                             <TransformViewer
                                 style={style}
@@ -149,17 +158,20 @@ export function ColumnsEditor(
         df,
         activeColumn,
         getTransformRequester,
-        commandConfig
+        commandConfig,
+        getPyRequester
     }: {
         df: DFWhole;
         activeColumn: string;
         getTransformRequester: unknown;
         commandConfig: CommandConfigT;
+        getPyRequester: unknown;
     } = {
         df: EmptyDf,
         activeColumn: 'stoptime',
         getTransformRequester: serverGetTransformRequester,
-        commandConfig: defaultCommandConfig
+        commandConfig: defaultCommandConfig,
+        getPyRequester: serverGetPyRequester
     }
 ) {
     const schema = df.schema;
@@ -178,6 +190,7 @@ export function ColumnsEditor(
             <DependentTabs
                 filledCommands={commands}
                 getTransformRequester={getTransformRequester}
+                getPyRequester={getPyRequester}
             />
         </div>
     );

@@ -1,6 +1,6 @@
 import React, {Component, useState, useEffect, Dispatch, SetStateAction} from 'react';
 import _ from 'lodash';
-import {ColumnsEditor, serverGetTransformRequester} from './ColumnsEditor';
+import {ColumnsEditor, serverGetTransformRequester, serverGetPyRequester} from './ColumnsEditor';
 import {tableDf, convertTableDF, columns, rows, DFWhole} from './staticData';
 import {DFViewer} from './DFViewer';
 import {CommandConfigT, defaultCommandConfig} from './CommandUtils';
@@ -34,6 +34,7 @@ export function DCFCell() {
                 activeColumn={activeCol}
                 getTransformRequester={serverGetTransformRequester}
                 commandConfig={commandConfig}
+                getPyRequester={serverGetPyRequester}
             />
         </div>
     );
@@ -48,12 +49,14 @@ export function WidgetDCFCell({
     origDf,
     getTransformRequester,
     commandConfig,
-    exposeCommandConfigSetter
+    exposeCommandConfigSetter,
+    getPyRequester
 }: {
     origDf: DFWhole;
     getTransformRequester: unknown;
     commandConfig: CommandConfigT;
     exposeCommandConfigSetter: CommandConfigSetterT;
+    getPyRequester: unknown;
 }) {
     const [activeCommandConfig, setCommandConfig] = useState(commandConfig);
     exposeCommandConfigSetter(setCommandConfig);
@@ -72,6 +75,7 @@ export function WidgetDCFCell({
                 activeColumn={activeCol}
                 getTransformRequester={getTransformRequester}
                 commandConfig={activeCommandConfig}
+                getPyRequester={getPyRequester}
             />
         </div>
     );
