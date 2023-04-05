@@ -5,8 +5,8 @@ import {
     bakedCommands,
     defaultCommandConfig,
     Command,
-    SetCommandsFunc,
-    CommandConfigT
+    SetCommandsFunc,//
+    CommandConfigT//
 } from './CommandUtils';
 import {CommandDetail, CommandAdder} from './CommandDetail';
 
@@ -15,10 +15,10 @@ export const CommandViewer = ({
     setCommands,
     activeColumn,
     allColumns,
-    commandConfig
+    commandConfig//
 }: {
     commands: Command[];
-    setCommands: SetCommandsFunc;
+    setCommands: SetCommandsFunc;//
     activeColumn: string;
     allColumns: string[];
     commandConfig: CommandConfigT;
@@ -63,7 +63,7 @@ export const CommandViewer = ({
 
     const columns = getColumns(commands);
 
-    function getSetCommand(key: string) {
+    function getSetCommand(key: string) {//makeSetCommand?
         return (newCommand: Command) => {
             const index = keyToIdx[key];
             const nextCommands = commands.map((c, i) => {
@@ -77,7 +77,7 @@ export const CommandViewer = ({
         };
     }
 
-    function getDeleteCommand(key: string) {
+    function getDeleteCommand(key: string) {//makeDeleteCommand
         return (newCommand: Command) => {
             const index = keyToIdx[key];
             const nextCommands = commands.map((c, i) => {
@@ -110,6 +110,7 @@ export const CommandViewer = ({
             />
             <div className='command-box'>
                 <h4> Commands </h4>
+
                 <DataGrid
                     style={{width: '1200px', height: '80px'}}
                     columns={columns}
@@ -136,6 +137,7 @@ export const CommandViewer = ({
     );
 };
 
+//
 export const Commands = () => {
     const [c, setC] = useState(bakedCommands);
     const [commandConfig, setCommandConfig] = useState(defaultCommandConfig);

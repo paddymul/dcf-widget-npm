@@ -4,7 +4,7 @@ import _ from 'lodash';
 import DataGrid, {Column, CellClickArgs} from 'react-data-grid';
 import {convertTableDF, DFWhole, EmptyDf} from './staticData';
 
-const updateAtMatch = (
+const updateAtMatch = (//
     cols: Column<unknown, unknown>[],
     key: string,
     subst: Record<string, string>
@@ -22,6 +22,10 @@ const updateAtMatch = (
 export type setColumFunc = (newCol: string) => void;
 export type StyleAnalogue = Record<string, string | number>;
 
+
+/*
+
+ */
 export function DFViewer(
     {
         df,
@@ -40,8 +44,9 @@ export function DFViewer(
     }
 ) {
     const [localColumns, localRows] = convertTableDF(df);
-    //Record<string, string|number>
+    
     const localStyle = style;
+    //ugly constuct
     const styledColumns = updateAtMatch(localColumns, activeCol || '___never', {
         cellClass: 'activeCol'
     }) as Column<unknown>[];

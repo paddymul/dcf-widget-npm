@@ -28,6 +28,7 @@ export const symDf: SymbolDf = {
 
 export type ColEnumArgs = Record<string, string>;
 
+
 export type Atom = number | string | SymbolT | ColEnumArgs;
 export type SettableArg = number | string | ColEnumArgs;
 
@@ -35,6 +36,7 @@ export type CommandSingleColumn = [SymbolT, SymbolDf, string];
 export type CommandSingleArg = [SymbolT, SymbolDf, string, Atom];
 export type CommandTwoArg = [SymbolT, SymbolDf, string, Atom, Atom];
 export type Command = CommandSingleColumn | CommandSingleArg | CommandTwoArg;
+
 
 export type SetCommandFunc = (newCommand: Command) => void;
 export type SetCommandsFunc = (newCommands: Command[]) => void;
@@ -50,13 +52,13 @@ export const defaultCommandPatterns: CommandDefaultArgSpec = {
     ]
 };
 
-export const commandDefaults: CommandDefaultArgs = {
+export const commandDefaults: CommandDefaultArgs = {//
     dropcol: [sym('dropcol'), symDf, 'col'],
     fillna: [sym('fillna'), symDf, 'col', 8],
     resample: [sym('resample'), symDf, 'col', 'monthly', {}]
 };
 
-export type CommandConfigT = {
+export type CommandConfigT = {//
     commandPatterns: CommandDefaultArgSpec;
     commandDefaults: CommandDefaultArgs;
 };
@@ -66,7 +68,7 @@ export const defaultCommandConfig: CommandConfigT = {
     commandDefaults
 };
 
-export const bakedCommands: Command[] = [
+export const bakedCommands: Command[] = [//
     [sym('dropcol'), symDf, 'col1'],
     [sym('fillna'), symDf, 'col2', 5],
     [sym('resample'), symDf, 'month', 'monthly', {}]

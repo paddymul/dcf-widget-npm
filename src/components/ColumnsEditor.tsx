@@ -6,7 +6,8 @@ import _ from 'lodash';
 import {CommandViewer} from './Commands';
 import {Command, CommandConfigT, defaultCommandConfig} from './CommandUtils';
 
-export function CommandDisplayer({filledCommands, style}) {
+
+export function CommandDisplayer({filledCommands, style}) {//
     const baseStyle = {margin: '0', textAlign: 'left'};
     const localStyle = {...baseStyle, ...style};
     return (
@@ -16,7 +17,7 @@ export function CommandDisplayer({filledCommands, style}) {
     );
 }
 
-export function PythonDisplayer({filledCommands, style, getPyRequester}) {
+export function PythonDisplayer({filledCommands, style, getPyRequester}) {//
     const [pyString, setPyString] = useState('');
     const pyRequester = getPyRequester(setPyString);
 
@@ -32,7 +33,7 @@ export function PythonDisplayer({filledCommands, style, getPyRequester}) {
     );
 }
 
-export const serverGetPyRequester = (setPyString) => {
+export const serverGetPyRequester = (setPyString) => {//
     const baseGetPy = (instructions: Command[]) => {
         const URLBase = 'http://localhost:5000/dcf/';
         const pyCodeUrl = `${URLBase}dcf_to_py/1?instructions=${JSON.stringify(instructions)}`;
@@ -54,7 +55,7 @@ const makeFullInstructions = (raw) => [{symbol: 'begin'}, ...raw];
 const EmptyInstructions = makeFullInstructions([]);
 const transformInstructions = (raw) => JSON.stringify(raw);
 
-export const serverGetTransformRequester = (setDf) => {
+export const serverGetTransformRequester = (setDf) => {//
     const baseRequestTransform = (passedInstructions) => {
         const URLBase = 'http://localhost:5000/dcf/';
         const sliceArgs = 'slice_start=3&slice_end=50';
@@ -71,7 +72,7 @@ export const serverGetTransformRequester = (setDf) => {
     return baseRequestTransform;
 };
 
-export function TransformViewer({filledCommands, style, getTransformRequester}) {
+export function TransformViewer({filledCommands, style, getTransformRequester}) {//
     const [transDf, setTransDf] = useState<DFWhole>(tableDf);
     const transformRequester = getTransformRequester(setTransDf);
 
@@ -88,7 +89,8 @@ export function TransformViewer({filledCommands, style, getTransformRequester}) 
     );
 }
 
-export function DependentTabs({filledCommands, getTransformRequester, getPyRequester}) {
+export function DependentTabs({filledCommands, getTransformRequester, getPyRequester}) {//
+    /*each of these tabs is dependent on filledCommands */
     const [tab, _setTab] = useState('df');
     const setTab = (tabName: string) => {
         const retFunc = () => {
@@ -104,6 +106,7 @@ export function DependentTabs({filledCommands, getTransformRequester, getPyReque
     ];
 
     const activeBackground = '#261d1d';
+    //ugly construct, open to suggestions
     if (tab === 'df') {
         dfStyle['background'] = activeBackground;
     }
