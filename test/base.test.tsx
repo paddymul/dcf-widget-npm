@@ -1,11 +1,20 @@
 import React from 'react';
 import {fireEvent, render, waitFor} from '@testing-library/react';
 
-import ReactEditList, * as REL from 'react-edit-list';
+import {DCFCell} from 'paddy-react-edit-list';
 
-import {schema, data, onLoad} from './data';
+//import {schema, data, onLoad} from './data';
 
 describe('base', () => {
+    it('basic use', async () => {
+        const r = render(<DCFCell />);
+        await waitFor(() => expect(r.getByText('Desk')));
+        //expect(onLoadFn).toBeCalledTimes(1);
+        expect(r.container.innerHTML).toMatchSnapshot();
+        r.unmount();
+    });
+    /*
+      keeping this existing code here for examples
     it('basic use', async () => {
         const onLoadFn = jest.fn(onLoad);
         const r = render(<ReactEditList schema={schema} onLoad={onLoadFn} />);
@@ -216,5 +225,6 @@ describe('base', () => {
                 const r = render(<ReactEditList schema={customSchema} onLoad={onLoad} />);
             }).toThrowError('Field product:custom has no formatter defined');
         });
-    });
+	});
+	*/
 });

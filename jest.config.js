@@ -5,7 +5,7 @@ module.exports = {
         '^.+.(t|j)sx?$': 'ts-jest'
     },
     moduleNameMapper: {
-        '^react-edit-list$': '<rootDir>/src'
+        '^paddy-react-edit-list$': '<rootDir>/src'
     },
     globals: {
         'ts-jest': {

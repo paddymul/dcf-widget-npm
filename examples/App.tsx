@@ -7,12 +7,6 @@ import {Button} from 'react-bootstrap';
 import './app.css';
 
 const examples = {
-    simple: {title: 'Simple', file: 'Simple'},
-    advanced: {title: 'Advanced', file: 'Advanced'},
-    grid: {title: 'Custom Grid', file: 'CustomGrid'},
-    pagination: {title: 'Pagination', file: 'Pagination'},
-    custom: {title: 'Custom Field', file: 'CustomField'},
-    reordering: {title: 'Reordering', file: 'Reordering'},
     DCFCell: {title: 'DCFCell', file: 'DCFCell'}
 };
 
