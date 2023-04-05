@@ -7,7 +7,9 @@ import {Button} from 'react-bootstrap';
 import './app.css';
 
 const examples = {
-    DCFCell: {title: 'DCFCell', file: 'DCFCell'}
+    DCFCellEx: {title: 'DCFCell', file: 'DCFCellEx'},
+    ColumnsEditorEx: {title: 'ColumnsEditor', file: 'ColumnsEditorEx'},
+    CommandViewerEx: {title: 'CommandViewer', file: 'CommandViewerEx'}
 };
 
 // The examples use a code-loading technique that I have described in
