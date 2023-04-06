@@ -6,3 +6,4 @@ export * as staticData from './components/staticData';
 export * as CommandUtils from './components/CommandUtils';
 export * as ColumnsEditor from './components/ColumnsEditor';
 export * as CommandsComponent from './components/Commands';
+export {DFViewer} from './components/DFViewer';

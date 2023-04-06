@@ -9,7 +9,8 @@ import './app.css';
 const examples = {
     DCFCellEx: {title: 'DCFCell', file: 'DCFCellEx'},
     ColumnsEditorEx: {title: 'ColumnsEditor', file: 'ColumnsEditorEx'},
-    CommandViewerEx: {title: 'CommandViewer', file: 'CommandViewerEx'}
+    CommandViewerEx: {title: 'CommandViewer', file: 'CommandViewerEx'},
+    DFViewerEx: {title: 'DFViewer', file: 'DFViewerEx'}
 };
 
 // The examples use a code-loading technique that I have described in
