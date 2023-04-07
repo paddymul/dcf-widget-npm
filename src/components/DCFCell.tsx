@@ -3,7 +3,7 @@ import _ from 'lodash';
 import {ColumnsEditor, serverGetTransformRequester, serverGetPyRequester} from './ColumnsEditor';
 import {tableDf, DFWhole} from './staticData';
 import {DFViewer} from './DFViewer';
-import {CommandConfigT, defaultCommandConfig} from './CommandUtils';
+import {CommandConfigT, bakedCommandConfig} from './CommandUtils';
 import {requestDf} from './utils';
 
 export function DCFCell() {
@@ -12,7 +12,7 @@ export function DCFCell() {
         requestDf('http://localhost:5000/dcf/df/1?slice_end=50', setOrigDf);
     }, []);
 
-    const [commandConfig, setCommandConfig] = useState(defaultCommandConfig);
+    const [commandConfig, setCommandConfig] = useState(bakedCommandConfig);
 
     useEffect(() => {
         fetch('http://localhost:5000/dcf/command-config').then(async (response) => {

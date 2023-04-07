@@ -3,14 +3,14 @@ import {DCFCell, staticData, CommandUtils, CommandsComponent} from 'paddy-react-
 
 export default function Simple() {
     return (
-        <CommandsComponent.CommandViewer
-            commands={CommandUtils.bakedCommands}
-            setCommands={(foo: unknown) => {
+        <CommandsComponent.OperationViewer
+            operations={CommandUtils.bakedOperations}
+            setOperations={(foo: unknown) => {
                 console.log('setCommands sent', foo);
             }}
             activeColumn={'foo-column'}
             allColumns={['foo-col', 'bar-col', 'baz-col']}
-            commandConfig={CommandUtils.defaultCommandConfig}
+            commandConfig={CommandUtils.bakedCommandConfig}
         />
     );
 }

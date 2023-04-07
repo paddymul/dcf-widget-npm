@@ -1,15 +1,10 @@
 import React, {Component, useState, useEffect, useReducer, useRef, useLayoutEffect} from 'react';
 import _ from 'lodash';
 import {
-    sym,
-    bakedCommands,
-    Atom,
-    Command,
+    Operation,
     ActualArg,
     SettableArg,
-    ArgSpec,
-    CommandDefaultArgSpec,
-    defaultCommandPatterns,
+    CommandArgSpec,
     OperationEventFunc,
     NoArgEventFunc
 } from './CommandUtils';
@@ -33,18 +28,18 @@ function replaceAtKey<T>(obj: Record<string, T>, key: string, subst: T): Record<
 const objWithoutNull = (obj: Record<string, string>, extraStrips: string[] = []) =>
     _.pickBy(obj, (x) => ![null, undefined, ...extraStrips].includes(x));
 
-export const CommandDetail = ({
+export const OperationDetail = ({
     command,
     setCommand,
     deleteCB,
     columns,
     commandPatterns
 }: {
-    command: Command;
+    command: Operation;
     setCommand: OperationEventFunc;
     deleteCB: NoArgEventFunc;
     columns: string[];
-    commandPatterns: CommandDefaultArgSpec;
+    commandPatterns: CommandArgSpec;
 }) => {
     const commandName = command[0]['symbol'];
     const pattern = commandPatterns[commandName];
@@ -83,7 +78,7 @@ export const ArgGetters = ({
     columns,
     deleteCB
 }: {
-    command: Command;
+    command: Operation;
     fullPattern: ActualArg[];
     setCommand: OperationEventFunc;
     columns: string[];
@@ -95,7 +90,7 @@ export const ArgGetters = ({
         const valSetter = (newVal) => {
             const newCommand = replaceAtIdx(command, idx, newVal);
             //console.log('newCommand', newCommand);
-            setCommand(newCommand as Command);
+            setCommand(newCommand as Operation);
         };
         return <ArgGetter argProps={pattern} val={val} setter={valSetter} columns={columns} />;
     };
@@ -204,11 +199,11 @@ const ArgGetter = ({
     }
 };
 
-export const CommandAdder = ({column, addCommandCb, commandDefaults}) => {
-    const addCommandByName = (localCommandName: string) => {
+export const OperationAdder = ({column, addOperationCb, defaultArgs}) => {
+    const addOperationByName = (localOperationName: string) => {
         return () => {
-            const defaultCommand = commandDefaults[localCommandName];
-            addCommandCb(replaceInArr(defaultCommand, 'col', column));
+            const defaultOperation = defaultArgs[localOperationName];
+            addOperationCb(replaceInArr(defaultOperation, 'col', column));
         };
     };
 
@@ -217,25 +212,10 @@ export const CommandAdder = ({column, addCommandCb, commandDefaults}) => {
             <fieldset>
                 <button> Column: {column}</button>
                 <label> Command Name </label>
-                {_.keys(commandDefaults).map((optionVal) => (
-                    <button onClick={addCommandByName(optionVal)}> {optionVal} </button>
+                {_.keys(defaultArgs).map((optionVal) => (
+                    <button onClick={addOperationByName(optionVal)}> {optionVal} </button>
                 ))}
             </fieldset>
-        </div>
-    );
-};
-
-export const CommandDetailHarness = () => {
-    const activeCommand = bakedCommands[0];
-    return (
-        <div>
-            <CommandDetail
-                command={activeCommand}
-                setCommand={nullSetter}
-                deleteCB={nullSetter}
-                columns={['foo', 'bar', 'baz']}
-                commandPatterns={defaultCommandPatterns}
-            />
         </div>
     );
 };

@@ -3,26 +3,26 @@ import {tableDf, DFWhole, EmptyDf} from './staticData';
 import {requestDf} from './utils';
 import {DFViewer} from './DFViewer';
 import _ from 'lodash';
-import {CommandViewer} from './Commands';
-import {Command, CommandConfigT, defaultCommandConfig} from './CommandUtils';
+import {OperationViewer} from './Commands';
+import {Operation, CommandConfigT, bakedCommandConfig} from './CommandUtils';
 
-export function CommandDisplayer({filledCommands, style}) {
+export function OperationDisplayer({filledOperations, style}) {
     const baseStyle = {margin: '0', textAlign: 'left'};
     const localStyle = {...baseStyle, ...style};
     return (
         <div className='command-displayer' style={{width: '100%'}}>
-            <pre style={localStyle}>{JSON.stringify(filledCommands)}</pre>
+            <pre style={localStyle}>{JSON.stringify(filledOperations)}</pre>
         </div>
     );
 }
 
-export function PythonDisplayer({filledCommands, style, getPyRequester}) {
+export function PythonDisplayer({filledOperations, style, getPyRequester}) {
     const [pyString, setPyString] = useState('');
     const pyRequester = getPyRequester(setPyString);
 
     useEffect(() => {
-        pyRequester(filledCommands);
-    }, [filledCommands, getPyRequester, pyRequester]);
+        pyRequester(filledOperations);
+    }, [filledOperations, getPyRequester, pyRequester]);
     const baseStyle = {margin: '0', textAlign: 'left'};
     const localStyle = {...baseStyle, ...style};
     return (
@@ -33,7 +33,7 @@ export function PythonDisplayer({filledCommands, style, getPyRequester}) {
 }
 
 export const serverGetPyRequester = (setPyString) => {
-    const baseGetPy = (instructions: Command[]) => {
+    const baseGetPy = (instructions: Operation[]) => {
         const URLBase = 'http://localhost:5000/dcf/';
         const pyCodeUrl = `${URLBase}dcf_to_py/1?instructions=${JSON.stringify(instructions)}`;
         if (instructions.length == 0) {
@@ -71,15 +71,15 @@ export const serverGetTransformRequester = (setDf) => {
     return baseRequestTransform;
 };
 
-export function TransformViewer({filledCommands, style, getTransformRequester}) {
+export function TransformViewer({filledOperations, style, getTransformRequester}) {
     const [transDf, setTransDf] = useState<DFWhole>(tableDf);
     const transformRequester = getTransformRequester(setTransDf);
 
-    const fullInstructions = makeFullInstructions(filledCommands);
+    const fullInstructions = makeFullInstructions(filledOperations);
 
     useEffect(() => {
         transformRequester(fullInstructions);
-    }, [filledCommands, fullInstructions, transformRequester]);
+    }, [filledOperations, fullInstructions, transformRequester]);
     return (
         <div className='transform-viewer'>
             {' '}
@@ -88,7 +88,7 @@ export function TransformViewer({filledCommands, style, getTransformRequester}) 
     );
 }
 
-export function DependentTabs({filledCommands, getTransformRequester, getPyRequester}) {
+export function DependentTabs({filledOperations, getTransformRequester, getPyRequester}) {
     const [tab, _setTab] = useState('df');
     const setTab = (tabName: string) => {
         const retFunc = () => {
@@ -131,18 +131,18 @@ export function DependentTabs({filledCommands, getTransformRequester, getPyReque
             <div className='output-area'>
                 {
                     {
-                        command: <CommandDisplayer style={style} filledCommands={filledCommands} />,
+                        command: <OperationDisplayer style={style} filledOperations={filledOperations} />,
                         python: (
                             <PythonDisplayer
                                 style={style}
-                                filledCommands={filledCommands}
+                                filledOperations={filledOperations}
                                 getPyRequester={getPyRequester}
                             />
                         ),
                         df: (
                             <TransformViewer
                                 style={style}
-                                filledCommands={filledCommands}
+                                filledOperations={filledOperations}
                                 getTransformRequester={getTransformRequester}
                             />
                         )
@@ -170,25 +170,25 @@ export function ColumnsEditor(
         df: EmptyDf,
         activeColumn: 'stoptime',
         getTransformRequester: serverGetTransformRequester,
-        commandConfig: defaultCommandConfig,
+        commandConfig: bakedCommandConfig,
         getPyRequester: serverGetPyRequester
     }
 ) {
     const schema = df.schema;
-    const [commands, setCommands] = useState<Command[]>([]);
+    const [operations, setOperations] = useState<Operation[]>([]);
 
     const allColumns = df.schema.fields.map((field) => field.name);
     return (
         <div className='columns-editor' style={{width: '100%'}}>
-            <CommandViewer
-                commands={commands}
-                setCommands={setCommands}
+            <OperationViewer
+                operations={operations}
+                setOperations={setOperations}
                 activeColumn={activeColumn}
                 allColumns={allColumns}
                 commandConfig={commandConfig}
             />
             <DependentTabs
-                filledCommands={commands}
+                filledOperations={operations}
                 getTransformRequester={getTransformRequester}
                 getPyRequester={getPyRequester}
             />

@@ -6,7 +6,7 @@ export default function Simple() {
         <ColumnsEditor.ColumnsEditor
             df={staticData.tableDf}
             activeColumn={'foo'}
-            commandConfig={CommandUtils.defaultCommandConfig}
+            commandConfig={CommandUtils.bakedCommandConfig}
             getTransformRequester={ColumnsEditor.serverGetTransformRequester}
             getPyRequester={ColumnsEditor.serverGetPyRequester}
         />

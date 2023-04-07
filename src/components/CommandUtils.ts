@@ -31,17 +31,17 @@ export type ColEnumArgs = Record<string, string>;
 export type Atom = number | string | SymbolT | ColEnumArgs;
 export type SettableArg = number | string | ColEnumArgs;
 
-export type CommandSingleColumn = [SymbolT, SymbolDf, string];
-export type CommandSingleArg = [SymbolT, SymbolDf, string, Atom];
-export type CommandTwoArg = [SymbolT, SymbolDf, string, Atom, Atom];
-export type Command = CommandSingleColumn | CommandSingleArg | CommandTwoArg;
+export type OperationSingleColumn = [SymbolT, SymbolDf, string];
+export type OperationSingleArg = [SymbolT, SymbolDf, string, Atom];
+export type OperationTwoArg = [SymbolT, SymbolDf, string, Atom, Atom];
+export type Operation = OperationSingleColumn | OperationSingleArg | OperationTwoArg;
 
-export type SetCommandFunc = (newCommand: Command) => void;
-export type SetCommandsFunc = (newCommands: Command[]) => void;
+export type SetOperationFunc = (newCommand: Operation) => void;
+export type SetOperationsFunc = (newCommands: Operation[]) => void;
 
-export type CommandDefaultArgSpec = Record<string, ArgSpec[]>;
-export type CommandDefaultArgs = Record<string, Command>;
-export const defaultCommandPatterns: CommandDefaultArgSpec = {
+export type CommandArgSpec = Record<string, ArgSpec[]>;
+export type OperationDefaultArgs = Record<string, Operation>;
+export const bakedArgSpecs: CommandArgSpec = {
     dropcol: [null],
     fillna: [[3, 'fillVal', 'type', 'integer']],
     resample: [
@@ -50,28 +50,28 @@ export const defaultCommandPatterns: CommandDefaultArgSpec = {
     ]
 };
 
-export const commandDefaults: CommandDefaultArgs = {
+export const bakedOperationDefaults: OperationDefaultArgs = {
     dropcol: [sym('dropcol'), symDf, 'col'],
     fillna: [sym('fillna'), symDf, 'col', 8],
     resample: [sym('resample'), symDf, 'col', 'monthly', {}]
 };
 
 export type CommandConfigT = {
-    commandPatterns: CommandDefaultArgSpec;
-    commandDefaults: CommandDefaultArgs;
+    argspecs: CommandArgSpec;
+    defaultArgs: OperationDefaultArgs;
 };
 
-export const defaultCommandConfig: CommandConfigT = {
-    commandPatterns: defaultCommandPatterns,
-    commandDefaults
+export const bakedCommandConfig: CommandConfigT = {
+    argspecs: bakedArgSpecs,
+    defaultArgs: bakedOperationDefaults
 };
 
-export const bakedCommands: Command[] = [
+export const bakedOperations: Operation[] = [
     [sym('dropcol'), symDf, 'col1'],
     [sym('fillna'), symDf, 'col2', 5],
     [sym('resample'), symDf, 'month', 'monthly', {}]
 ];
 
 //this will become OperationEventFunc
-export type OperationEventFunc = (newCommand: Command) => void;
+export type OperationEventFunc = (newCommand: Operation) => void;
 export type NoArgEventFunc = () => void;
