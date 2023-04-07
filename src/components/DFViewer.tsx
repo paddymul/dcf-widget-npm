@@ -8,7 +8,12 @@ import {ColDef, Grid, GridOptions} from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 
-const updateAtMatch = (cols: ColDef[], key: string, subst: Partial<ColDef>, negative:Partial<ColDef>) => {
+const updateAtMatch = (
+    cols: ColDef[],
+    key: string,
+    subst: Partial<ColDef>,
+    negative: Partial<ColDef>
+) => {
     const retColumns = cols.map((x) => {
         if (x.field === key) {
             return {...x, ...subst};
@@ -21,7 +26,6 @@ const updateAtMatch = (cols: ColDef[], key: string, subst: Partial<ColDef>, nega
 
 export type setColumFunc = (newCol: string) => void;
 export type StyleAnalogue = Record<string, string | number>;
-
 
 export function dfToAgrid(tdf: DFWhole): [ColDef[], unknown[]] {
     const fields = tdf.schema.fields;
@@ -54,21 +58,23 @@ export function DFViewer(
     }
 ) {
     const [agColsPure, agData] = dfToAgrid(df);
-    
-    const styledColumns = updateAtMatch(_.clone(agColsPure), activeCol || '___never', {
-        cellStyle: {background: 'green'}
-    }, {cellStyle:{}} );
+
+    const styledColumns = updateAtMatch(
+        _.clone(agColsPure),
+        activeCol || '___never',
+        {
+            cellStyle: {background: 'green'}
+        },
+        {cellStyle: {}}
+    );
 
     //console.log("styledColumns after updateAtMatch", activeCol, styledColumns)
     const gridOptions: GridOptions = {
         rowSelection: 'single',
         onRowClicked: (event) => console.log('A row was clicked'),
         onCellClicked: (event) => {
-            const colName = event.column.getColId()
-            if (
-                setActiveCol === undefined ||
-                colName === undefined
-            ) {
+            const colName = event.column.getColId();
+            if (setActiveCol === undefined || colName === undefined) {
                 return;
             } else {
                 setActiveCol(colName);
@@ -86,3 +92,4 @@ export function DFViewer(
         </div>
     );
 }
+

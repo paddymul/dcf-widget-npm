@@ -71,3 +71,7 @@ export const bakedCommands: Command[] = [
     [sym('fillna'), symDf, 'col2', 5],
     [sym('resample'), symDf, 'month', 'monthly', {}]
 ];
+
+//this will become OperationEventFunc
+export type OperationEventFunc = (newCommand: Command) => void;
+export type NoArgEventFunc = () => void;

@@ -44,7 +44,7 @@
         "react/prop-types": "off",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
-        "no-console": "warn",
+        "no-console": "off",
         "quotes": [
             2,
             "single",

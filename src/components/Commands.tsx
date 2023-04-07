@@ -1,14 +1,19 @@
 import React, {Component, useState, useEffect, useReducer, useRef, useLayoutEffect} from 'react';
 import _ from 'lodash';
-import DataGrid from 'react-data-grid';
 import {
     bakedCommands,
     defaultCommandConfig,
     Command,
     SetCommandsFunc,
-    CommandConfigT
+    CommandConfigT,
+    OperationEventFunc,
+    NoArgEventFunc
 } from './CommandUtils';
 import {CommandDetail, CommandAdder} from './CommandDetail';
+import {AgGridReact} from 'ag-grid-react'; // the AG Grid React Component
+import {ColDef, Grid, GridOptions} from 'ag-grid-community';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 export const CommandViewer = ({
     commands,
@@ -53,17 +58,17 @@ export const CommandViewer = ({
     // previously was null
     const [activeKey, setActiveKey] = useState('');
 
-    const getColumns = (passedCommands: Command[]) =>
+    const getColumns = (passedCommands: Command[]): ColDef[] =>
         _.map(Array.from(passedCommands.entries()), ([index, element]) => {
             const name = element[0]['symbol'];
             const key = name + index.toString();
-            const column = {key, name, width: 20, maxWidth: 60};
+            const column = {field: key, headerName: name}; // width: 20, maxWidth: 60};
             return column;
         });
 
     const columns = getColumns(commands);
 
-    function getSetCommand(key: string) {
+    function getSetCommand(key: string): OperationEventFunc {
         return (newCommand: Command) => {
             const index = keyToIdx[key];
             const nextCommands = commands.map((c, i) => {
@@ -77,8 +82,8 @@ export const CommandViewer = ({
         };
     }
 
-    function getDeleteCommand(key: string) {
-        return (newCommand: Command) => {
+    function getDeleteCommand(key: string): NoArgEventFunc {
+        return (): void => {
             const index = keyToIdx[key];
             const nextCommands = commands.map((c, i) => {
                 if (i === index) {
@@ -92,17 +97,22 @@ export const CommandViewer = ({
         };
     }
 
-    const addCommand = (newCommand: Command) => {
+    const addCommand: OperationEventFunc = (newCommand: Command) => {
         const newCommandArr = [...commands, newCommand];
         setCommands(newCommandArr);
-        const newCommandKey = getColumns(newCommandArr)[newCommandArr.length - 1].key;
-        setActiveKey(newCommandKey);
+        const newCommandKey = getColumns(newCommandArr)[newCommandArr.length - 1].field;
+        if (newCommandKey !== undefined) {
+            setActiveKey(newCommandKey);
+        }
     };
 
     const {commandPatterns, commandDefaults} = commandConfig;
+    console.log('columns', columns);
+    console.log('rows', rows);
 
     return (
         <div className='command-viewer'>
+            <h2> command adder </h2>
             <CommandAdder
                 column={activeColumn}
                 addCommandCb={addCommand}
@@ -110,18 +120,10 @@ export const CommandViewer = ({
             />
             <div className='command-box'>
                 <h4> Commands </h4>
-                <DataGrid
-                    style={{width: '1200px', height: '80px'}}
-                    columns={columns}
-                    rows={rows}
-                    onCellClick={({row, column}) => {
-                        // add to generated commands
-                        const tempRow = _.clone(rows[0]);
-                        const oldVal = tempRow[column.key];
-                        tempRow[column.key] = oldVal == 'false' ? 'true' : 'false';
-                        setActiveKey(column.key);
-                    }}
-                />
+                <h5>datagrid</h5>
+                <div style={{height: 200, width: 600}} className='ag-theme-alpine'>
+                    <AgGridReact rowData={rows} columnDefs={columns}></AgGridReact>
+                </div>
             </div>
             {activeKey && (
                 <CommandDetail
@@ -135,6 +137,21 @@ export const CommandViewer = ({
         </div>
     );
 };
+
+/*
+                <DataGrid
+                    style={{width: '1200px', height: '80px'}}
+                    columns={columns}
+                    rows={rows}
+                    onCellClick={({row, column}) => {
+                        // add to generated commands
+                        const tempRow = _.clone(rows[0]);
+                        const oldVal = tempRow[column.key];
+                        tempRow[column.key] = oldVal == 'false' ? 'true' : 'false';
+                        setActiveKey(column.key);
+                    }}
+    />
+    */
 
 export const Commands = () => {
     const [c, setC] = useState(bakedCommands);

@@ -5,12 +5,14 @@ import {
     sym,
     bakedCommands,
     Atom,
-    SetCommandFunc,
     Command,
     ActualArg,
     SettableArg,
     ArgSpec,
-    defaultCommandPatterns
+    CommandDefaultArgSpec,
+    defaultCommandPatterns,
+    OperationEventFunc,
+    NoArgEventFunc
 } from './CommandUtils';
 
 const nullSetter = () => 5;
@@ -32,7 +34,19 @@ function replaceAtKey<T>(obj: Record<string, T>, key: string, subst: T): Record<
 const objWithoutNull = (obj: Record<string, string>, extraStrips: string[] = []) =>
     _.pickBy(obj, (x) => ![null, undefined, ...extraStrips].includes(x));
 
-export const CommandDetail = ({command, setCommand, deleteCB, columns, commandPatterns}) => {
+export const CommandDetail = ({
+    command,
+    setCommand,
+    deleteCB,
+    columns,
+    commandPatterns
+}: {
+    command: Command;
+    setCommand: OperationEventFunc;
+    deleteCB: NoArgEventFunc;
+    columns: string[];
+    commandPatterns: CommandDefaultArgSpec;
+}) => {
     const commandName = command[0]['symbol'];
     const pattern = commandPatterns[commandName];
 
@@ -72,7 +86,7 @@ export const ArgGetters = ({
 }: {
     command: Command;
     fullPattern: ActualArg[];
-    setCommand: SetCommandFunc;
+    setCommand: OperationEventFunc;
     columns: string[];
     deleteCB: () => void;
 }) => {
