@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import {DFWhole, EmptyDf} from './staticData';
 import {OperationViewer} from './Commands';
 import {Operation} from './OperationUtils';
-import {CommandConfigT, bakedCommandConfig} from './OperationUtils';
+import {CommandConfigT} from './CommandUtils';
+import {bakedCommandConfig} from './bakedOperationDefaults';
 import {serverGetTransformRequester, serverGetPyRequester, DependentTabs} from './DependentTabs';
 
 export function ColumnsEditor(

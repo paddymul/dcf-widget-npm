@@ -7,7 +7,8 @@ import {
     OperationEventFunc,
     NoArgEventFunc
 } from './OperationUtils';
-import {bakedCommandConfig, CommandConfigT} from './OperationUtils';
+import {CommandConfigT} from './CommandUtils';
+import {bakedCommandConfig} from './bakedOperationDefaults';
 import {OperationDetail, OperationAdder} from './CommandDetail';
 import {AgGridReact} from 'ag-grid-react'; // the AG Grid React Component
 import {ColDef, Grid, GridOptions} from 'ag-grid-community';
@@ -107,7 +108,7 @@ export const OperationViewer = ({
         }
     };
     const {argspecs, defaultArgs} = commandConfig;
-
+    console.log("OperationsViewer operationDict", operationDict, "activeKey", activeKey)
     return (
         <div className='command-viewer'>
             <h2> Operation adder </h2>

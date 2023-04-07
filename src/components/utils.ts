@@ -10,3 +10,7 @@ export const requestDf = (url: string, setCallBack: setDFFunc) => {
     });
     return retPromise;
 };
+
+export const sym = (symbolName: string) => {
+    return {symbol: symbolName};
+};

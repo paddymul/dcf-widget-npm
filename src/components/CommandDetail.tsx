@@ -1,7 +1,7 @@
 import React, {Component, useState, useEffect, useReducer, useRef, useLayoutEffect} from 'react';
 import _ from 'lodash';
 import {Operation, SettableArg, OperationEventFunc, NoArgEventFunc} from './OperationUtils';
-import {ActualArg, CommandArgSpec} from './OperationUtils';
+import {ActualArg, CommandArgSpec} from './CommandUtils';
 
 const nullSetter = () => 5;
 

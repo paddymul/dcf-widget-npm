@@ -4,7 +4,8 @@ import {serverGetTransformRequester, serverGetPyRequester} from './DependentTabs
 import {ColumnsEditor} from './ColumnsEditor';
 import {tableDf, DFWhole} from './staticData';
 import {DFViewer} from './DFViewer';
-import {CommandConfigT, bakedCommandConfig} from './OperationUtils';
+import {CommandConfigT} from './CommandUtils';
+import {bakedCommandConfig} from './bakedOperationDefaults';
 import {requestDf} from './utils';
 
 export function DCFCell() {
