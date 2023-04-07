@@ -1,6 +1,5 @@
 import React, {Component, useState, useEffect, useReducer, useRef, useLayoutEffect} from 'react';
 import _ from 'lodash';
-import DataGrid from 'react-data-grid';
 import {
     sym,
     bakedCommands,

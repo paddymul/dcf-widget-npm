@@ -1,7 +1,7 @@
 import React, {Component, useState, useEffect, Dispatch, SetStateAction} from 'react';
 import _ from 'lodash';
 import {ColumnsEditor, serverGetTransformRequester, serverGetPyRequester} from './ColumnsEditor';
-import {tableDf, convertTableDF, columns, rows, DFWhole} from './staticData';
+import {tableDf, DFWhole} from './staticData';
 import {DFViewer} from './DFViewer';
 import {CommandConfigT, defaultCommandConfig} from './CommandUtils';
 import {requestDf} from './utils';

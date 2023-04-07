@@ -1,8 +1,6 @@
 import * as React from 'react';
 import {DCFCell, staticData, CommandUtils, CommandsComponent} from 'paddy-react-edit-list';
 
-import 'react-data-grid/lib/styles.css';
-
 export default function Simple() {
     return (
         <CommandsComponent.CommandViewer

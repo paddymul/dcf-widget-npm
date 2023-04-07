@@ -1,8 +1,6 @@
-import 'react-data-grid/lib/styles.css';
 import React, {Component, useState, useEffect} from 'react';
 import _ from 'lodash';
-import DataGrid, {Column, CellClickArgs} from 'react-data-grid';
-import {convertTableDF, DFWhole, DFColumn, EmptyDf} from './staticData';
+import {DFWhole, DFColumn, EmptyDf} from './staticData';
 import {AgGridReact} from 'ag-grid-react'; // the AG Grid React Component
 import {ColDef, Grid, GridOptions} from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
@@ -92,4 +90,3 @@ export function DFViewer(
         </div>
     );
 }
-

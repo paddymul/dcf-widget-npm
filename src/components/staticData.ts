@@ -1,4 +1,3 @@
-import {Column} from 'react-data-grid';
 const origColumns = [
     {key: 'id', name: 'ID'},
     {key: 'title', name: 'Title'}
@@ -28,14 +27,8 @@ export const EmptyDf: DFWhole = {
     data: []
 };
 
-export const convertTableDF = (tdf: DFWhole): [Column<unknown>[], DFData] => {
-    const fields = tdf.schema.fields;
-    const retColumns = fields.map((f: DFColumn) => {
-        return {key: f.name, name: f.name};
-    });
-    return [retColumns, tdf.data];
-};
 //print(sdf.to_json(orient='table', indent=2))
+
 export const tableDf = {
     schema: {
         fields: [
@@ -116,5 +109,3 @@ export const tableDf = {
         }
     ]
 };
-
-export const [columns, rows] = convertTableDF(tableDf);
