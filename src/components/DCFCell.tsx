@@ -1,9 +1,10 @@
 import React, {Component, useState, useEffect, Dispatch, SetStateAction} from 'react';
 import _ from 'lodash';
-import {ColumnsEditor, serverGetTransformRequester, serverGetPyRequester} from './ColumnsEditor';
+import {serverGetTransformRequester, serverGetPyRequester} from './DependentTabs';
+import {ColumnsEditor} from './ColumnsEditor';
 import {tableDf, DFWhole} from './staticData';
 import {DFViewer} from './DFViewer';
-import {CommandConfigT, bakedCommandConfig} from './CommandUtils';
+import {CommandConfigT, bakedCommandConfig} from './OperationUtils';
 import {requestDf} from './utils';
 
 export function DCFCell() {

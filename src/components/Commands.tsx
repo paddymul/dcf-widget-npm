@@ -2,13 +2,12 @@ import React, {Component, useState, useEffect, useReducer, useRef, useLayoutEffe
 import _ from 'lodash';
 import {
     bakedOperations,
-    bakedCommandConfig,
     Operation,
     SetOperationsFunc,
-    CommandConfigT,
     OperationEventFunc,
     NoArgEventFunc
-} from './CommandUtils';
+} from './OperationUtils';
+import {bakedCommandConfig, CommandConfigT} from './OperationUtils';
 import {OperationDetail, OperationAdder} from './CommandDetail';
 import {AgGridReact} from 'ag-grid-react'; // the AG Grid React Component
 import {ColDef, Grid, GridOptions} from 'ag-grid-community';

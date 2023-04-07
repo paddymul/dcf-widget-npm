@@ -6,6 +6,19 @@ export const sym = (symbolName: string) => {
 
 const UnknownCommand = [sym('nonexistent'), sym('df'), 'col1'];
 
+export type Atom = number | string | SymbolT | ColEnumArgs;
+export type SettableArg = number | string | ColEnumArgs;
+
+export type OperationSingleColumn = [SymbolT, SymbolDf, string];
+export type OperationSingleArg = [SymbolT, SymbolDf, string, Atom];
+export type OperationTwoArg = [SymbolT, SymbolDf, string, Atom, Atom];
+export type Operation = OperationSingleColumn | OperationSingleArg | OperationTwoArg;
+
+export type SetOperationFunc = (newCommand: Operation) => void;
+export type SetOperationsFunc = (newCommands: Operation[]) => void;
+
+export type OperationDefaultArgs = Record<string, Operation>;
+
 const ArgNames = ['Idx', 'label', 'specName', 'extraSpecArgs'];
 type TypeSpec = [number, string, 'type', 'integer' | 'float' | 'string'];
 type EnumSpec = [number, string, 'enum', string[]];
@@ -28,19 +41,7 @@ export const symDf: SymbolDf = {
 
 export type ColEnumArgs = Record<string, string>;
 
-export type Atom = number | string | SymbolT | ColEnumArgs;
-export type SettableArg = number | string | ColEnumArgs;
-
-export type OperationSingleColumn = [SymbolT, SymbolDf, string];
-export type OperationSingleArg = [SymbolT, SymbolDf, string, Atom];
-export type OperationTwoArg = [SymbolT, SymbolDf, string, Atom, Atom];
-export type Operation = OperationSingleColumn | OperationSingleArg | OperationTwoArg;
-
-export type SetOperationFunc = (newCommand: Operation) => void;
-export type SetOperationsFunc = (newCommands: Operation[]) => void;
-
 export type CommandArgSpec = Record<string, ArgSpec[]>;
-export type OperationDefaultArgs = Record<string, Operation>;
 export const bakedArgSpecs: CommandArgSpec = {
     dropcol: [null],
     fillna: [[3, 'fillVal', 'type', 'integer']],
