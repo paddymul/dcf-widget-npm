@@ -108,7 +108,7 @@ export const OperationViewer = ({
         }
     };
     const {argspecs, defaultArgs} = commandConfig;
-    console.log("OperationsViewer operationDict", operationDict, "activeKey", activeKey)
+    console.log('OperationsViewer operationDict', operationDict, 'activeKey', activeKey);
     return (
         <div className='command-viewer'>
             <h2> Operation adder </h2>
