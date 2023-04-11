@@ -1,180 +1,67 @@
-/* .left-menu button { */
-/*     text-align: left; */
-/*     font-weight: bold; */
-/*     color: #333333; */
-/* } */
+.left-menu button {
+    text-align: left;
+    font-weight: bold;
+    color: #333333;
+}
 
-/* .left-menu a:hover { */
-/*     text-decoration: none; */
-/* } */
+.left-menu a:hover {
+    text-decoration: none;
+}
 
-/* .left-menu { */
-/*     width: 10em; */
-/*     min-width: 10em; */
-/*     max-width: 10em; */
-/* } */
+.left-menu {
+    width: 10em;
+    min-width: 10em;
+    max-width: 10em;
+}
 
-/* .codeblock { */
-/*     max-height: 90vh; */
-/*     overflow-y: scroll; */
-/* } */
+.codeblock {
+    max-height: 90vh;
+    overflow-y: scroll;
+}
 
-/* .codeblock > pre { */
-/*     margin-top: 0 !important; */
-/* } */
+.codeblock > pre {
+    margin-top: 0 !important;
+}
 
-/* .codeblock > pre > code { */
-/*     font-size: 0.9rem !important; */
-/*     line-height: 1.1 !important; */
-/* } */
-
-
-
-/* :root */
-/* { */
-/*     --color-example: #fff; */
-/* } */
+.codeblock > pre > code {
+    font-size: 0.9rem !important;
+    line-height: 1.1 !important;
+}
 
 
-/* html,body  */
-/* { */
-/*     font-family: "Roboto", sans-serif; */
-/*     display: flex; */
-/*     flex-grow: 1; */
-/*     width: 100%; */
-/*     height: 100%; */
-/*     min-height: 100vh; */
-/*     font-size: 16px; */
-/*     text-align: center; */
-/*     color: var(--color-example); */
-/*     margin: 0; */
-/* } */
 
-/* #app  */
-/* { */
-/*     background-color: #4158D0; */
-/*     background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);  */
-/*     color: var(--color-example); */
-
-/*     justify-content: center; */
-/*     display: flex; */
-/*     flex-grow: 1; */
-/*     flex-direction:column; */
-/*     align-items: center; */
-/*     font-size: 2rem; */
-/*     outline:4px solid pink; */
-/* } */
-
-/* .column-list { */
-/*     width:100%; font-size:1rem; */
-/*     dl { */
-/* 	display:flex; margin:0; padding:0; */
-/* 	div.list-item { */
-/* 	    padding:3px; */
-/* 	    dt { */
-/* 		float:left; max-width:90px; overflow:hidden; max-height:1rem; */
-/* 	    } */
-/* 	    dd { */
-/* 		float:right; */
-/* 	    } */
-/* 	    .column-editor { */
-/* 		width:100%;  clear:both; height:30px; */
-/* 		label { */
-/* 		    span { float:left; } */
-/* 		    input[type=checkbox] { */
-/* 			float:left; */
-/* 		    } */
-/* 		    input[type=text] {} */
-/* 		} */
-/* 	    } */
-/* 	} */
-/*     } */
-/* } */
-
-/* .dependent-tabs { */
-/*     font-size:1rem; */
-/*     ul.tabs { */
-/* 	li {float:left; border:1px solid #463e3e; */
-/* 	    border-bottom:none; */
-/* 	    list-style:none; margin-right:5px; */
-/* 	    padding:2px */
-/* 	   } */
-
-/*     } */
-/*     .output-area { */
-/* 	clear:both; float:none; */
-/*     } */
-/* } */
+:root
+{
+    --color-example: #fff;
+}
 
 
-/* .python-displayer, .command-displayer { */
-/*     width:100%; */
-/*     height:100%; */
-/*     background: hsl(0deg 0% 13%); */
-/*     overflow:hidden; */
-/*     padding:16px; */
-/*     /\*border:1px solid red; *\/ */
-/*     pre { */
+html,body
+{
+    font-family: "Roboto", sans-serif;
+    display: flex;
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    font-size: 16px;
+    text-align: center;
+    color: var(--color-example);
+    margin: 0;
+}
 
+#app
+{
+    background-color: #4158D0;
+    background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+    color: var(--color-example);
 
-/* 	color: #41FF00  */
-		    
-/*     } */
-
-/* } */
-/* .command-displayer { */
-/*     pre { */
-/* 	overflow:hidden; */
-/*     } */
-/* } */
-
-/* .features  */
-/* { */
-/*     font-size: 1.7rem; */
-
-/*     & div  */
-/*     { */
-/*         padding: 0.5rem; */
-/*     } */
-/* } */
-
-
-/* .modal { */
-/*   position: absolute; */
-/*   background-color: #ffffff; */
-/*   border: 1px solid black; */
-/*   padding: 16px; */
-/*   list-style: none; */
-
-/*   > li { */
-/*     padding: 8px; */
-/*   } */
-/* } */
-
-/* /\* */
-/* .command-viewer { */
-/*     border:1px solid red; */
-/*     font-size:1rem; */
-/*     height:320x; */
-/*     .command-box { */
-/* 	display:flex; */
-/* 	height:80px; */
-/* 	border:1px solid green; */
-/* 	h4 { */
-/* 	    width:250px; */
-/* 	    font-size:1em; */
-/* 	    border:1px orange; */
-		  
-/* 	} */
-/* 	div { */
-
-/* 	    overflow-x:scroll */
-/* 	} */
-/*     } */
-
-/* } */
-/* *\/ */
-
-
-/* .activeCol {background:gray} */
+    justify-content: center;
+    display: flex;
+    flex-grow: 1;
+    flex-direction:column;
+    align-items: center;
+    font-size: 2rem;
+    outline:4px solid pink;
+}
 
