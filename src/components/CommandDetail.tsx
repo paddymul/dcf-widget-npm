@@ -86,7 +86,11 @@ export const ArgGetters = ({
             //console.log('newCommand', newCommand);
             setCommand(newCommand as Operation);
         };
-        return <ArgGetter argProps={pattern} val={val} setter={valSetter} columns={columns} />;
+        return (
+            <div key={idx}>
+                <ArgGetter argProps={pattern} val={val} setter={valSetter} columns={columns} />
+            </div>
+        );
     };
     return (
         <div className='arg-getters'>
@@ -207,7 +211,10 @@ export const OperationAdder = ({column, addOperationCb, defaultArgs}) => {
                 <button> Column: {column}</button>
                 <label> Command Name </label>
                 {_.keys(defaultArgs).map((optionVal) => (
-                    <button onClick={addOperationByName(optionVal)}> {optionVal} </button>
+                    <button key={optionVal} onClick={addOperationByName(optionVal)}>
+                        {' '}
+                        {optionVal}{' '}
+                    </button>
                 ))}
             </fieldset>
         </div>
