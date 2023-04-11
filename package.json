@@ -1,12 +1,13 @@
 {
   "name": "paddy-react-edit-list",
-  "version": "1.1.16",
+  "version": "1.1.18",
   "description": "Universal Editable List React Component",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
     "clean": "tsc --build --clean && rimraf docs",
-    "build": "npm run clean && npm run build:lib && npm run build:examples && npm run build:doc",
+    "build": "npm run clean && npm run build:lib && npm run build:examples && npm run build:doc && npm run compile:sass",
+    "compile:sass": "sass src/npm-styles.scss:css/dcf-npm.css",
     "build:lib": "tsc",
     "build:examples": "webpack --mode=production --env production",
     "build:doc": "documentation readme src/* --section=API --parse-extension=ts --parse-extension=tsx --require-extension=ts --require-extension=tsx --sort-order=source",
