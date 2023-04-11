@@ -1,12 +1,6 @@
 import React, {Component, useState, useEffect, useReducer, useRef, useLayoutEffect} from 'react';
 import _ from 'lodash';
-import {
-    bakedOperations,
-    Operation,
-    SetOperationsFunc,
-    OperationEventFunc,
-    NoArgEventFunc
-} from './OperationUtils';
+import {Operation, SetOperationsFunc, OperationEventFunc, NoArgEventFunc} from './OperationUtils';
 import {CommandConfigT} from './CommandUtils';
 import {bakedCommandConfig} from './bakedOperationDefaults';
 import {OperationDetail, OperationAdder} from './CommandDetail';
@@ -14,6 +8,33 @@ import {AgGridReact} from 'ag-grid-react'; // the AG Grid React Component
 import {ColDef, Grid, GridOptions} from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import {bakedOperations} from './staticData';
+
+const getColumns = (passedOperations: Operation[]): ColDef[] =>
+    _.map(Array.from(passedOperations.entries()), ([index, element]) => {
+        const name = element[0]['symbol'];
+        const key = name + index.toString();
+        const column = {field: key, headerName: name}; // width: 20, maxWidth: 60};
+        return column;
+    });
+
+export const OperationsList = ({operations}: {operations: Operation[]}) => {
+    const rowElements = _.map(Array.from(operations.entries()), ([index, element]) => {
+        const name = element[0]['symbol'];
+        const key = name + index.toString();
+        const rowEl: Record<string, string> = {};
+        rowEl[key] = element[2];
+        return rowEl;
+    });
+    const rows = [_.merge({}, ...rowElements)];
+    const columns = getColumns(operations);
+    console.log('OperationsList columns', columns);
+    return (
+        <div style={{height: 200, width: 600}} className='ag-theme-alpine'>
+            <AgGridReact rowData={rows} columnDefs={columns}></AgGridReact>
+        </div>
+    );
+};
 
 export const OperationViewer = ({
     operations,
@@ -28,15 +49,6 @@ export const OperationViewer = ({
     allColumns: string[];
     commandConfig: CommandConfigT;
 }) => {
-    const rowElements = _.map(Array.from(operations.entries()), ([index, element]) => {
-        const name = element[0]['symbol'];
-        const key = name + index.toString();
-        const rowEl: Record<string, string> = {};
-        rowEl[key] = element[2];
-        return rowEl;
-    });
-    const rows = [_.merge({}, ...rowElements)];
-
     const operationObjs = _.map(Array.from(operations.entries()), ([index, element]) => {
         const name = element[0]['symbol'];
         const key = name + index.toString();
@@ -59,16 +71,6 @@ export const OperationViewer = ({
 
     // previously was null
     const [activeKey, setActiveKey] = useState('');
-
-    const getColumns = (passedOperations: Operation[]): ColDef[] =>
-        _.map(Array.from(passedOperations.entries()), ([index, element]) => {
-            const name = element[0]['symbol'];
-            const key = name + index.toString();
-            const column = {field: key, headerName: name}; // width: 20, maxWidth: 60};
-            return column;
-        });
-
-    const columns = getColumns(operations);
 
     function getSetOperation(key: string): OperationEventFunc {
         return (newOperation: Operation) => {
@@ -119,9 +121,7 @@ export const OperationViewer = ({
             />
             <div className='command-box'>
                 <h4> Operations </h4>
-                <div style={{height: 200, width: 600}} className='ag-theme-alpine'>
-                    <AgGridReact rowData={rows} columnDefs={columns}></AgGridReact>
-                </div>
+                <OperationsList operations={operations} />
             </div>
             {activeKey && (
                 <OperationDetail
