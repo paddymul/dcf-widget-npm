@@ -44,7 +44,6 @@ export const OperationDetail = ({
     } else if (_.isEqual(pattern, [null])) {
         return (
             <div className='command-detail'>
-                <h4>no arguments</h4>
                 <button onClick={deleteCB}>X</button>
             </div>
         );
@@ -207,9 +206,8 @@ export const OperationAdder = ({column, addOperationCb, defaultArgs}) => {
 
     return (
         <div className='command-adder'>
+            <span className={'column-name'}> Column: {column}</span>
             <fieldset>
-                <button> Column: {column}</button>
-                <label> Command Name </label>
                 {_.keys(defaultArgs).map((optionVal) => (
                     <button key={optionVal} onClick={addOperationByName(optionVal)}>
                         {' '}

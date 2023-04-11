@@ -80,7 +80,7 @@ export function DFViewer(
         }
     };
     return (
-        <div style={{height: 500, width: 600}} className='ag-theme-alpine'>
+        <div style={{height: 500, width: 1000}} className='ag-theme-alpine'>
             <p> {activeCol}</p>
             <AgGridReact
                 gridOptions={gridOptions}

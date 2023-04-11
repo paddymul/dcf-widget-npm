@@ -38,6 +38,7 @@ export const OperationsList = ({
 
     const gridOptions: GridOptions = {
         rowSelection: 'single',
+        headerHeight: 30,
         //onRowClicked: (event) => console.log('A row was clicked'),
         onCellClicked: (event) => {
             const colName = event.column.getColId();
@@ -46,7 +47,7 @@ export const OperationsList = ({
         }
     };
     return (
-        <div style={{height: 200, width: 600}} className='ag-theme-alpine'>
+        <div style={{height: 78, width: 1000}} className='ag-theme-alpine'>
             <AgGridReact
                 gridOptions={gridOptions}
                 rowData={rows}
@@ -133,13 +134,12 @@ export const OperationViewer = ({
     console.log('OperationsViewer operationDict', operationDict, 'activeKey', activeKey);
     return (
         <div className='command-viewer'>
-            <h2> Operation adder </h2>
             <OperationAdder
                 column={activeColumn}
                 addOperationCb={addOperation}
                 defaultArgs={defaultArgs}
             />
-            <div className='command-box'>
+            <div className='operations-box'>
                 <h4> Operations </h4>
                 <OperationsList operations={operations} setActiveKey={setActiveKey} />
             </div>
