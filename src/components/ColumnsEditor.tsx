@@ -31,6 +31,7 @@ export function ColumnsEditor(
     const [operations, setOperations] = useState<Operation[]>([]);
 
     const allColumns = df.schema.fields.map((field) => field.name);
+    console.log('Columns Editor, commandConfig', commandConfig);
     return (
         <div className='columns-editor' style={{width: '100%'}}>
             <OperationViewer

@@ -18,7 +18,13 @@ const getColumns = (passedOperations: Operation[]): ColDef[] =>
         return column;
     });
 
-export const OperationsList = ({operations}: {operations: Operation[]}) => {
+export const OperationsList = ({
+    operations,
+    setActiveKey
+}: {
+    operations: Operation[];
+    setActiveKey: React.Dispatch<React.SetStateAction<string>>;
+}) => {
     const rowElements = _.map(Array.from(operations.entries()), ([index, element]) => {
         const name = element[0]['symbol'];
         const key = name + index.toString();
@@ -29,9 +35,23 @@ export const OperationsList = ({operations}: {operations: Operation[]}) => {
     const rows = [_.merge({}, ...rowElements)];
     const columns = getColumns(operations);
     console.log('OperationsList columns', columns);
+
+    const gridOptions: GridOptions = {
+        rowSelection: 'single',
+        //onRowClicked: (event) => console.log('A row was clicked'),
+        onCellClicked: (event) => {
+            const colName = event.column.getColId();
+            console.log('operationsList onCellClicked');
+            setActiveKey(colName);
+        }
+    };
     return (
         <div style={{height: 200, width: 600}} className='ag-theme-alpine'>
-            <AgGridReact rowData={rows} columnDefs={columns}></AgGridReact>
+            <AgGridReact
+                gridOptions={gridOptions}
+                rowData={rows}
+                columnDefs={columns}
+            ></AgGridReact>
         </div>
     );
 };
@@ -121,7 +141,7 @@ export const OperationViewer = ({
             />
             <div className='command-box'>
                 <h4> Operations </h4>
-                <OperationsList operations={operations} />
+                <OperationsList operations={operations} setActiveKey={setActiveKey} />
             </div>
             {activeKey && (
                 <OperationDetail

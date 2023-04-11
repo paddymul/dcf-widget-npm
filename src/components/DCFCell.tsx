@@ -82,3 +82,17 @@ export function WidgetDCFCell({
         </div>
     );
 }
+
+export function WidgetDCFCellExample() {
+    return (
+        <WidgetDCFCell
+            origDf={tableDf}
+            getTransformRequester={serverGetTransformRequester}
+            exposeCommandConfigSetter={(e) =>
+                console.log('exposeCommandConfigSetter called with', e)
+            }
+            commandConfig={bakedCommandConfig}
+            getPyRequester={serverGetPyRequester}
+        />
+    );
+}

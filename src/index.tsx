@@ -1,6 +1,11 @@
 import {DependentTabs} from './components/DependentTabs';
 
-export {DCFCell, WidgetDCFCell, CommandConfigSetterT} from './components/DCFCell';
+export {
+    DCFCell,
+    WidgetDCFCell,
+    CommandConfigSetterT,
+    WidgetDCFCellExample
+} from './components/DCFCell';
 export {Operation} from './components/OperationUtils';
 export {CommandConfigT} from './components/CommandUtils';
 
