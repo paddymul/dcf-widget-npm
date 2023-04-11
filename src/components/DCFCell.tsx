@@ -7,7 +7,7 @@ import {DFViewer} from './DFViewer';
 import {CommandConfigT} from './CommandUtils';
 import {bakedCommandConfig} from './bakedOperationDefaults';
 import {requestDf} from './utils';
-
+import '../npm-styles.scss';
 export function DCFCell() {
     const [origDf, setOrigDf] = useState<DFWhole>(tableDf);
     useEffect(() => {

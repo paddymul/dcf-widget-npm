@@ -42,9 +42,41 @@ const webpackConfig = (env): Configuration => {
                         configFile: 'examples/tsconfig.json'
                     }
                 },
+		{
+		    test: /\.css$/,
+		    use: [
+			//isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+			'style-loader',
+			'css-loader',
+			{
+			    loader: 'postcss-loader',
+			    options: {
+				postcssOptions: {
+				    plugins: ['postcss-nested']
+				}
+			    }
+			}
+		    ]
+		},
                 {
-                    test: /\.css$/i,
-                    use: ['style-loader', 'css-loader']
+                    test: /\.scss$/,
+                    use: [
+                        // We're in dev and want HMR, SCSS is handled in JS
+                        // In production, we want our css as files
+                        "style-loader",
+                        "css-loader",
+                        {
+                            loader: "postcss-loader",
+                            options: {
+                                postcssOptions: {
+                                    plugins: [
+                                        ["postcss-preset-env"],
+                                    ],
+                                },
+                            },
+                        },
+                        "sass-loader"
+                    ],
                 },
                 {
                     test: /\.svg$/,
