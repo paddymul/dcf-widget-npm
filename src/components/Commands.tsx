@@ -6,6 +6,7 @@ import {bakedCommandConfig} from './bakedOperationDefaults';
 import {OperationDetail, OperationAdder} from './CommandDetail';
 import {AgGridReact} from 'ag-grid-react'; // the AG Grid React Component
 import {ColDef, Grid, GridOptions} from 'ag-grid-community';
+import {updateAtMatch} from './gridUtils';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import {bakedOperations} from './staticData';
@@ -20,9 +21,11 @@ const getColumns = (passedOperations: Operation[]): ColDef[] =>
 
 export const OperationsList = ({
     operations,
+    activeKey,
     setActiveKey
 }: {
     operations: Operation[];
+    activeKey?: string;
     setActiveKey: React.Dispatch<React.SetStateAction<string>>;
 }) => {
     const rowElements = _.map(Array.from(operations.entries()), ([index, element]) => {
@@ -34,6 +37,16 @@ export const OperationsList = ({
     });
     const rows = [_.merge({}, ...rowElements)];
     const columns = getColumns(operations);
+
+    const styledColumns = updateAtMatch(
+        _.clone(columns),
+        activeKey || '___never',
+        {
+            cellStyle: {background: 'green'}
+        },
+        {cellStyle: {}}
+    );
+
     console.log('OperationsList columns', columns);
 
     const gridOptions: GridOptions = {
@@ -51,7 +64,7 @@ export const OperationsList = ({
             <AgGridReact
                 gridOptions={gridOptions}
                 rowData={rows}
-                columnDefs={columns}
+                columnDefs={styledColumns}
             ></AgGridReact>
         </div>
     );
@@ -141,7 +154,11 @@ export const OperationViewer = ({
             />
             <div className='operations-box'>
                 <h4> Operations </h4>
-                <OperationsList operations={operations} setActiveKey={setActiveKey} />
+                <OperationsList
+                    operations={operations}
+                    activeKey={activeKey}
+                    setActiveKey={setActiveKey}
+                />
             </div>
             {activeKey && (
                 <OperationDetail

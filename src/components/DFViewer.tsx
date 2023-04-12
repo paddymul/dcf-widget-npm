@@ -1,26 +1,13 @@
 import React, {Component, useState, useEffect} from 'react';
 import _ from 'lodash';
 import {DFWhole, DFColumn, EmptyDf} from './staticData';
+import {updateAtMatch} from './gridUtils';
 import {AgGridReact} from 'ag-grid-react'; // the AG Grid React Component
 import {ColDef, Grid, GridOptions} from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-
-const updateAtMatch = (
-    cols: ColDef[],
-    key: string,
-    subst: Partial<ColDef>,
-    negative: Partial<ColDef>
-) => {
-    const retColumns = cols.map((x) => {
-        if (x.field === key) {
-            return {...x, ...subst};
-        } else {
-            return {...x, ...negative};
-        }
-    });
-    return retColumns;
-};
+import '../../css/ag-alpine-theme-local.scss';
+import '../npm-styles.scss';
 
 export type setColumFunc = (newCol: string) => void;
 export type StyleAnalogue = Record<string, string | number>;
@@ -79,14 +66,16 @@ export function DFViewer(
             }
         }
     };
+    /*             <div style={{height: 500, width: 1000}} className='ag-alpine-theme-local df-grid'> */
     return (
-        <div style={{height: 500, width: 1000}} className='ag-theme-alpine'>
-            <p> {activeCol}</p>
-            <AgGridReact
-                gridOptions={gridOptions}
-                rowData={agData}
-                columnDefs={styledColumns}
-            ></AgGridReact>
+        <div className='df-viewer'>
+            <div style={{height: 500, width: 1000}} className='ag-theme-alpine-dark'>
+                <AgGridReact
+                    gridOptions={gridOptions}
+                    rowData={agData}
+                    columnDefs={styledColumns}
+                ></AgGridReact>
+            </div>
         </div>
     );
 }

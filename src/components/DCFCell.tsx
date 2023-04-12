@@ -7,7 +7,7 @@ import {DFViewer} from './DFViewer';
 import {CommandConfigT} from './CommandUtils';
 import {bakedCommandConfig} from './bakedOperationDefaults';
 import {requestDf} from './utils';
-import '../npm-styles.scss';
+
 export function DCFCell() {
     const [origDf, setOrigDf] = useState<DFWhole>(tableDf);
     useEffect(() => {
@@ -25,9 +25,6 @@ export function DCFCell() {
     const [activeCol, setActiveCol] = useState('stoptime');
     return (
         <div className='dcf-root flex flex-col' style={{width: '100%', height: '100%'}}>
-            <h1 style={{fontSize: '1.25rem', margin: '5px', textAlign: 'left'}}>
-                Data Cleaning Framework{' '}
-            </h1>
             <div className='orig-df flex flex-row' style={{height: '250px', overflow: 'hidden'}}>
                 <DFViewer df={origDf} activeCol={activeCol} setActiveCol={setActiveCol} />
             </div>
@@ -66,9 +63,6 @@ export function WidgetDCFCell({
 
     return (
         <div className='dcf-root flex flex-col' style={{width: '100%', height: '100%'}}>
-            <h1 style={{fontSize: '1.25rem', margin: '5px', textAlign: 'left'}}>
-                Data Cleaning Framework{' '}
-            </h1>
             <div className='orig-df flex flex-row' style={{height: '250px', overflow: 'hidden'}}>
                 <DFViewer df={origDf} activeCol={activeCol} setActiveCol={setActiveCol} />
             </div>
