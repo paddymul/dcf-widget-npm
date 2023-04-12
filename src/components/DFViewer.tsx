@@ -1,24 +1,16 @@
 import React, {Component, useState, useEffect} from 'react';
 import _ from 'lodash';
 import {DFWhole, DFColumn, EmptyDf} from './staticData';
-import {updateAtMatch} from './gridUtils';
+import {updateAtMatch, dfToAgrid} from './gridUtils';
 import {AgGridReact} from 'ag-grid-react'; // the AG Grid React Component
 import {ColDef, Grid, GridOptions} from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import '../../css/ag-alpine-theme-local.scss';
-import '../npm-styles.scss';
+// import '../../css/ag-alpine-theme-local.scss'
+// import '../npm-styles.scss';
 
 export type setColumFunc = (newCol: string) => void;
 export type StyleAnalogue = Record<string, string | number>;
-
-export function dfToAgrid(tdf: DFWhole): [ColDef[], unknown[]] {
-    const fields = tdf.schema.fields;
-    const retColumns = fields.map((f: DFColumn) => {
-        return {field: f.name};
-    });
-    return [retColumns, tdf.data];
-}
 
 const columnDefs: ColDef[] = [
     {field: 'make', filter: true},
