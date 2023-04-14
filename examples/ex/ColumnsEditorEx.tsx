@@ -13,8 +13,7 @@ export default function Simple() {
             df={staticData.tableDf}
             activeColumn={'foo'}
             commandConfig={staticData.bakedCommandConfig}
-            getTransformRequester={DependentTabs.serverGetTransformRequester}
-            getPyRequester={DependentTabs.serverGetPyRequester}
+            getOrRequester={DependentTabs.serverGetTransformRequester}
         />
     );
 }

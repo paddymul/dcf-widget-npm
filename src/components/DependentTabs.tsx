@@ -1,5 +1,12 @@
-import React, {Component, useState, useEffect} from 'react';
-import {tableDf, DFWhole} from './staticData';
+import React, {
+    Component,
+    useState,
+    useEffect,
+    CSSProperties,
+    Dispatch,
+    SetStateAction
+} from 'react';
+import {tableDf, DFWhole, EmptyDf} from './staticData';
 import {requestDf} from './utils';
 import {DFViewer} from './DFViewer';
 import _ from 'lodash';
@@ -15,39 +22,15 @@ export function OperationDisplayer({filledOperations, style}) {
     );
 }
 
-export function PythonDisplayer({filledOperations, style, getPyRequester}) {
-    const [pyString, setPyString] = useState('');
-    const pyRequester = getPyRequester(setPyString);
-
-    useEffect(() => {
-        pyRequester(filledOperations);
-    }, [filledOperations, getPyRequester, pyRequester]);
+export function PythonDisplayer({style, generatedPyCode}) {
     const baseStyle = {margin: '0', textAlign: 'left'};
     const localStyle = {...baseStyle, ...style};
     return (
         <div className='python-displayer' style={{width: '100%'}}>
-            <pre style={localStyle}>{pyString}</pre>
+            <pre style={localStyle}>{generatedPyCode}</pre>
         </div>
     );
 }
-
-export const serverGetPyRequester = (setPyString) => {
-    const baseGetPy = (instructions: Operation[]) => {
-        const URLBase = 'http://localhost:5000/dcf/';
-        const pyCodeUrl = `${URLBase}dcf_to_py/1?instructions=${JSON.stringify(instructions)}`;
-        if (instructions.length == 0) {
-            setPyString('');
-            return;
-        } else {
-            fetch(pyCodeUrl).then(async (response) => {
-                const fullResp = await response.json();
-                const pyCode = fullResp['py'];
-                setPyString(pyCode);
-            });
-        }
-    };
-    return baseGetPy;
-};
 
 const makeFullInstructions = (raw) => [{symbol: 'begin'}, ...raw];
 const EmptyInstructions = makeFullInstructions([]);
@@ -70,24 +53,47 @@ export const serverGetTransformRequester = (setDf) => {
     return baseRequestTransform;
 };
 
-export function TransformViewer({filledOperations, style, getTransformRequester}) {
-    const [transDf, setTransDf] = useState<DFWhole>(tableDf);
-    const transformRequester = getTransformRequester(setTransDf);
+export function TransformViewer({
+    style,
+    transformedDf
+}: {
+    style: CSSProperties;
+    transformedDf: DFWhole;
+}) {
+    return (
+        <div className='transform-viewer'>
+            <DFViewer style={style} df={transformedDf} />
+        </div>
+    );
+}
+export type OperationResult = {transformed_df: DFWhole; generated_py_code: string};
+
+export type OrRequesterT = (ops: Operation[]) => void;
+export type getOperationResultSetterT = (
+    setter: Dispatch<SetStateAction<OperationResult>>
+) => OrRequesterT;
+
+export const baseOperationResults: OperationResult = {
+    transformed_df: EmptyDf,
+    generated_py_code: 'default py code'
+};
+
+export function DependentTabs({
+    filledOperations,
+    getOrRequester
+}: {
+    filledOperations: Operation[];
+    getOrRequester: getOperationResultSetterT;
+}) {
+    const [operationResult, setOperationResult] = useState<OperationResult>(baseOperationResults);
+    const orRequester = getOrRequester(setOperationResult);
 
     const fullInstructions = makeFullInstructions(filledOperations);
 
     useEffect(() => {
-        transformRequester(fullInstructions);
-    }, [filledOperations, fullInstructions, transformRequester]);
-    return (
-        <div className='transform-viewer'>
-            {' '}
-            <DFViewer style={style} df={transDf} />{' '}
-        </div>
-    );
-}
+        orRequester(fullInstructions);
+    }, [filledOperations, fullInstructions, operationResult, orRequester]);
 
-export function DependentTabs({filledOperations, getTransformRequester, getPyRequester}) {
     const [tab, _setTab] = useState('df');
     const setTab = (tabName: string) => {
         const retFunc = () => {
@@ -136,15 +142,13 @@ export function DependentTabs({filledOperations, getTransformRequester, getPyReq
                         python: (
                             <PythonDisplayer
                                 style={style}
-                                filledOperations={filledOperations}
-                                getPyRequester={getPyRequester}
+                                generatedPyCode={operationResult.generated_py_code}
                             />
                         ),
                         df: (
                             <TransformViewer
                                 style={style}
-                                filledOperations={filledOperations}
-                                getTransformRequester={getTransformRequester}
+                                transformedDf={operationResult.transformed_df}
                             />
                         )
                     }[tab]

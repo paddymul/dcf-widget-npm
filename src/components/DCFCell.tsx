@@ -1,6 +1,6 @@
 import React, {Component, useState, useEffect, Dispatch, SetStateAction} from 'react';
 import _ from 'lodash';
-import {serverGetTransformRequester, serverGetPyRequester} from './DependentTabs';
+import {getOperationResultSetterT, serverGetTransformRequester} from './DependentTabs';
 import {ColumnsEditor} from './ColumnsEditor';
 import {tableDf, DFWhole} from './staticData';
 import {DFViewer} from './DFViewer';
@@ -31,9 +31,8 @@ export function DCFCell() {
             <ColumnsEditor
                 df={origDf}
                 activeColumn={activeCol}
-                getTransformRequester={serverGetTransformRequester}
+                getOrRequester={serverGetTransformRequester}
                 commandConfig={commandConfig}
-                getPyRequester={serverGetPyRequester}
             />
         </div>
     );
@@ -46,16 +45,14 @@ export type CommandConfigSetterT = (setter: Dispatch<SetStateAction<CommandConfi
  */
 export function WidgetDCFCell({
     origDf,
-    getTransformRequester,
+    getOrRequester,
     commandConfig,
-    exposeCommandConfigSetter,
-    getPyRequester
+    exposeCommandConfigSetter
 }: {
     origDf: DFWhole;
-    getTransformRequester: unknown;
+    getOrRequester: getOperationResultSetterT;
     commandConfig: CommandConfigT;
     exposeCommandConfigSetter: CommandConfigSetterT;
-    getPyRequester: unknown;
 }) {
     const [activeCommandConfig, setCommandConfig] = useState(commandConfig);
     exposeCommandConfigSetter(setCommandConfig);
@@ -69,9 +66,8 @@ export function WidgetDCFCell({
             <ColumnsEditor
                 df={origDf}
                 activeColumn={activeCol}
-                getTransformRequester={getTransformRequester}
+                getOrRequester={getOrRequester}
                 commandConfig={activeCommandConfig}
-                getPyRequester={getPyRequester}
             />
         </div>
     );
@@ -81,12 +77,11 @@ export function WidgetDCFCellExample() {
     return (
         <WidgetDCFCell
             origDf={tableDf}
-            getTransformRequester={serverGetTransformRequester}
+            getOrRequester={serverGetTransformRequester}
             exposeCommandConfigSetter={(e) =>
                 console.log('exposeCommandConfigSetter called with', e)
             }
             commandConfig={bakedCommandConfig}
-            getPyRequester={serverGetPyRequester}
         />
     );
 }

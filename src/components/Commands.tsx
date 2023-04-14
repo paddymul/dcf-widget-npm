@@ -47,7 +47,7 @@ export const OperationsList = ({
         {cellStyle: {}}
     );
 
-    console.log('OperationsList columns', columns);
+    //console.log('OperationsList columns', columns);
 
     const gridOptions: GridOptions = {
         rowSelection: 'single',
@@ -55,7 +55,7 @@ export const OperationsList = ({
         //onRowClicked: (event) => console.log('A row was clicked'),
         onCellClicked: (event) => {
             const colName = event.column.getColId();
-            console.log('operationsList onCellClicked');
+            //console.log('operationsList onCellClicked');
             setActiveKey(colName);
         }
     };
@@ -144,7 +144,7 @@ export const OperationViewer = ({
         }
     };
     const {argspecs, defaultArgs} = commandConfig;
-    console.log('OperationsViewer operationDict', operationDict, 'activeKey', activeKey);
+    //console.log('OperationsViewer operationDict', operationDict, 'activeKey', activeKey);
     return (
         <div className='command-viewer'>
             <OperationAdder

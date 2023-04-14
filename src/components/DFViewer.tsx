@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, {Component, useState, useEffect, CSSProperties} from 'react';
 import _ from 'lodash';
 import {DFWhole, DFColumn, EmptyDf} from './staticData';
 import {updateAtMatch, dfToAgrid} from './gridUtils';
@@ -10,7 +10,6 @@ import 'ag-grid-community/styles/ag-theme-alpine.css';
 // import '../npm-styles.scss';
 
 export type setColumFunc = (newCol: string) => void;
-export type StyleAnalogue = Record<string, string | number>;
 
 const columnDefs: ColDef[] = [
     {field: 'make', filter: true},
@@ -25,7 +24,7 @@ export function DFViewer(
         setActiveCol
     }: {
         df: DFWhole;
-        style?: StyleAnalogue;
+        style?: CSSProperties;
         activeCol?: string;
         setActiveCol?: setColumFunc;
     } = {
