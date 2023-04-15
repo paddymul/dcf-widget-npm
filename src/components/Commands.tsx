@@ -42,7 +42,7 @@ export const OperationsList = ({
         _.clone(columns),
         activeKey || '___never',
         {
-            cellStyle: {background: 'green'}
+            cellStyle: {background: 'var(--ag-range-selection-background-color-3)'}
         },
         {cellStyle: {}}
     );

@@ -78,6 +78,14 @@ export const baseOperationResults: OperationResult = {
     generated_py_code: 'default py code'
 };
 
+export function TabComponent({currentTab, _setTab, tabName}) {
+    return (<li
+	    onClick={() => {_setTab(tabName)}}
+	    className={currentTab===tabName? 'active' : ''}>
+	{tabName}
+	    </li>);
+}
+
 export function DependentTabs({
     filledOperations,
     getOrRequester
@@ -94,58 +102,29 @@ export function DependentTabs({
         orRequester(fullInstructions);
     }, [filledOperations, fullInstructions, operationResult, orRequester]);
 
-    const [tab, _setTab] = useState('df');
-    const setTab = (tabName: string) => {
-        const retFunc = () => {
-            _setTab(tabName);
-        };
-        return retFunc;
-    };
-    const baseStyle = {background: 'grey'};
-    const [dfStyle, pythonStyle, commandStyle] = [
-        _.clone(baseStyle),
-        _.clone(baseStyle),
-        _.clone(baseStyle)
-    ];
-
-    const activeBackground = '#261d1d';
-    if (tab === 'df') {
-        dfStyle['background'] = activeBackground;
-    }
-    if (tab === 'python') {
-        pythonStyle['background'] = activeBackground;
-    }
-    if (tab === 'command') {
-        commandStyle['background'] = activeBackground;
-    }
+    const [tab, _setTab] = useState('DataFrame');
     const style = {height: '45vh'};
 
     return (
         <div className='dependent-tabs' style={{width: '100%'}}>
             <ul className='tabs'>
-                <li onClick={setTab('df')} style={dfStyle}>
-                    DataFrame
-                </li>
-                <li onClick={setTab('python')} style={pythonStyle}>
-                    Python
-                </li>
-                <li onClick={setTab('command')} style={commandStyle}>
-                    Command
-                </li>
+	    <TabComponent currentTab={tab} _setTab={_setTab} tabName={'DataFrame'}/>
+	    <TabComponent currentTab={tab} _setTab={_setTab} tabName={'Python'}/>
+	    <TabComponent currentTab={tab} _setTab={_setTab} tabName={'Operations'}/>
             </ul>
             <div className='output-area'>
                 {
                     {
-                        command: (
+                        Operations: (
                             <OperationDisplayer style={style} filledOperations={filledOperations} />
                         ),
-                        python: (
+                        Python: (
                             <PythonDisplayer
                                 style={style}
                                 generatedPyCode={operationResult.generated_py_code}
                             />
                         ),
-                        df: (
+                        DataFrame: (
                             <TransformViewer
                                 style={style}
                                 transformedDf={operationResult.transformed_df}
