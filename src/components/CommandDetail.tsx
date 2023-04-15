@@ -35,6 +35,9 @@ export const OperationDetail = ({
     columns: string[];
     commandPatterns: CommandArgSpec;
 }) => {
+    if (command === undefined) {
+        return <h2> error undefined command </h2>;
+    }
     const commandName = command[0]['symbol'];
     const pattern = commandPatterns[commandName];
 
@@ -43,14 +46,14 @@ export const OperationDetail = ({
         return <h2>unknown command {commandName}</h2>;
     } else if (_.isEqual(pattern, [null])) {
         return (
-            <div className='command-detail'>
+            <div className='operation-detail'>
                 <button onClick={deleteCB}>X</button>
             </div>
         );
     } else {
         const fullPattern = pattern as ActualArg[];
         return (
-            <div className='command-detail'>
+            <div className='operation-detail'>
                 <ArgGetters
                     command={command}
                     fullPattern={fullPattern}
@@ -205,7 +208,7 @@ export const OperationAdder = ({column, addOperationCb, defaultArgs}) => {
     };
 
     return (
-        <div className='command-adder'>
+        <div className='operation-adder'>
             <span className={'column-name'}> Column: {column}</span>
             <fieldset>
                 {_.keys(defaultArgs).map((optionVal) => (

@@ -60,7 +60,7 @@ export function DFViewer(
     /*             <div style={{height: 500, width: 1000}} className='ag-alpine-theme-local df-grid'> */
     return (
         <div className='df-viewer'>
-            <div style={{height: 500, width: 1000}} className='ag-theme-alpine-dark'>
+            <div style={{height: 500, width: 1000}} className='theme-hanger ag-theme-alpine-dark'>
                 <AgGridReact
                     gridOptions={gridOptions}
                     rowData={agData}

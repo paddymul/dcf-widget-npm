@@ -79,11 +79,16 @@ export const baseOperationResults: OperationResult = {
 };
 
 export function TabComponent({currentTab, _setTab, tabName}) {
-    return (<li
-	    onClick={() => {_setTab(tabName)}}
-	    className={currentTab===tabName? 'active' : ''}>
-	{tabName}
-	    </li>);
+    return (
+        <li
+            onClick={() => {
+                _setTab(tabName);
+            }}
+            className={currentTab === tabName ? 'active' : ''}
+        >
+            {tabName}
+        </li>
+    );
 }
 
 export function DependentTabs({
@@ -108,9 +113,9 @@ export function DependentTabs({
     return (
         <div className='dependent-tabs' style={{width: '100%'}}>
             <ul className='tabs'>
-	    <TabComponent currentTab={tab} _setTab={_setTab} tabName={'DataFrame'}/>
-	    <TabComponent currentTab={tab} _setTab={_setTab} tabName={'Python'}/>
-	    <TabComponent currentTab={tab} _setTab={_setTab} tabName={'Operations'}/>
+                <TabComponent currentTab={tab} _setTab={_setTab} tabName={'DataFrame'} />
+                <TabComponent currentTab={tab} _setTab={_setTab} tabName={'Python'} />
+                <TabComponent currentTab={tab} _setTab={_setTab} tabName={'Operations'} />
             </ul>
             <div className='output-area'>
                 {
