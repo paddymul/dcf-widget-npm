@@ -71,7 +71,7 @@ const App = (): JSX.Element => {
                         {Object.keys(examples).map((e) => (
                             <Route key={e} path={`/${e}`}>
                                 <div className='row'>
-                                    <div className='col-12 col-xl-5 mb-1'>
+                                    <div className='col-12 col-xl-12 mb-12'>
                                         <React.Suspense fallback={<div>Loading component...</div>}>
                                             {React.createElement(examples[e].comp)}
                                         </React.Suspense>
