@@ -4,8 +4,14 @@ import React from 'react';
 import {HashRouter as Router, Route, Link} from 'react-router-dom';
 import {Button} from 'react-bootstrap';
 
+
 import './app.css';
+
+
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
 import '../src/npm-styles.scss';
+import '../src/tight-grid.css';
 
 const examples = {
     DCFCellEx: {title: 'DCFCell', file: 'DCFCellEx'},

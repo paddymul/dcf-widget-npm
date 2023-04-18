@@ -4,11 +4,9 @@ import {DFWhole, DFColumn, EmptyDf} from './staticData';
 import {updateAtMatch, dfToAgrid} from './gridUtils';
 import {AgGridReact} from 'ag-grid-react'; // the AG Grid React Component
 import {ColDef, Grid, GridOptions} from 'ag-grid-community';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
 // import '../../css/ag-alpine-theme-local.scss'
 // import '../npm-styles.scss';
-
+// import '../tight-grid.css';
 export type setColumFunc = (newCol: string) => void;
 
 const columnDefs: ColDef[] = [
