@@ -1,9 +1,11 @@
-import React, {Component, useState, useEffect, CSSProperties} from 'react';
+import React, {Component, useState, useRef, useEffect, useCallback, CSSProperties} from 'react';
 import _ from 'lodash';
 import {DFWhole, DFColumn, EmptyDf} from './staticData';
 import {updateAtMatch, dfToAgrid} from './gridUtils';
 import {AgGridReact} from 'ag-grid-react'; // the AG Grid React Component
-import {ColDef, Grid, GridOptions} from 'ag-grid-community';
+import {ColDef, Grid, GridOptions, GridColumnsChangedEvent,
+	GridReadyEvent} from 'ag-grid-community';
+
 // import '../../css/ag-alpine-theme-local.scss'
 // import '../npm-styles.scss';
 // import '../tight-grid.css';
@@ -31,8 +33,9 @@ export function DFViewer(
         setActiveCol: () => null
     }
 ) {
-    const [agColsPure, agData] = dfToAgrid(df);
 
+
+    const [agColsPure, agData] = dfToAgrid(df);
     const styledColumns = updateAtMatch(
         _.clone(agColsPure),
         activeCol || '___never',
@@ -55,11 +58,31 @@ export function DFViewer(
             }
         }
     };
-    /*             <div style={{height: 500, width: 1000}} className='ag-alpine-theme-local df-grid'> */
+    const gridRef = useRef<AgGridReact<unknown>>(null);
+
+    const autoSize = (params: any) => { gridRef.current!.columnApi.autoSizeAllColumns()}
+    const onStuffAutosize  = useCallback(autoSize)
+
+    if(_.isEqual(df, EmptyDf)) {
+	return (<div className='df-viewer'>
+            <div style={{height: 500, width: 2500}} className='theme-hanger ag-theme-alpine-dark'>
+  	    </div>
+	    </div>)
+    }
+    
+  
+    useEffect(() => {
+	const timer = setTimeout(() => {
+	    onStuffAutosize()
+	}, 150);
+    return () => clearTimeout(timer);
+    }, []);
     return (
         <div className='df-viewer'>
-            <div style={{height: 500, width: 1000}} className='theme-hanger ag-theme-alpine-dark'>
-                <AgGridReact
+            <div style={{height: 500, width: 2500}} className='theme-hanger ag-theme-alpine-dark'>
+	    
+            <AgGridReact
+	            ref={gridRef}
                     gridOptions={gridOptions}
                     rowData={agData}
                     columnDefs={styledColumns}
