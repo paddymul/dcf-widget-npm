@@ -1,4 +1,4 @@
-import React, {Component, useState, useRef, useEffect, useCallback, CSSProperties} from 'react';
+import React, {Component, useState, useRef, useEffect, useLayoutEffect, useCallback, CSSProperties} from 'react';
 import _ from 'lodash';
 import {DFWhole, DFColumn, EmptyDf} from './staticData';
 import {updateAtMatch, dfToAgrid} from './gridUtils';
@@ -63,22 +63,75 @@ export function DFViewer(
     };
     const gridRef = useRef<AgGridReact<unknown>>(null);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            gridRef.current!.columnApi.autoSizeAllColumns();
-        }, 150);
-        return () => clearTimeout(timer);
-    }, [gridRef]);
-    if (_.isEqual(df, EmptyDf)) {
-        return (
-            <div className='df-viewer'>
-                <div
-                    style={{height: 500, width: 2500}}
-                    className='theme-hanger ag-theme-alpine-dark'
-                ></div>
-            </div>
-        );
+    const makeCondtionalAutosize = (count:number, delay:number) => {
+	let counter =count;
+	let timer;
+	let conditionallyAutosize;
+	let colWidthHasBeenSet = false;
+	let originalColWidth = -5;
+	let currentColWidth = -10 
+	if(gridRef ===undefined || gridRef.current === null) {
+	    currentColWidth = 200
+	} else {
+	    currentColWidth = gridRef!.current!.columnApi!.columnModel!.displayedColumns[0].actualWidth;
+	}
+
+	// console.log('first pass currentColWidth');
+	
+	conditionallyAutosize = () => {
+	    // console.log("conditionallyAutosize", count, delay)
+	    if(gridRef !== undefined) {
+		// console.log("gridref defined")
+		if( gridRef.current !== undefined) {
+		    // console.log("gridref.current defined")
+		    if( gridRef.current.columnApi !== undefined) {
+
+			// console.log("calling autosizeAllColumns", count, delay);
+			gridRef.current.columnApi.autoSizeAllColumns();
+			const cm = gridRef.current.columnApi.columnModel
+			// console.log("bodyWidth", cm.bodyWidth)
+			// console.log("cm", cm)
+			const dc = cm.displayedColumns
+			// console.log('dc', dc);
+
+			if(dc.length !== 0) {
+			    const aw = dc[0].actualWidth // this eventually changes after the resize
+			    //console.log("dc", aw);
+			    if(colWidthHasBeenSet === false) {
+				originalColWidth = aw;
+				currentColWidth = aw;
+				colWidthHasBeenSet = true;
+			    } else {
+				currentColWidth = aw;
+			    }
+			}
+			gridRef.current.forceUpdate()
+		    }
+		}
+	    }
+//	    console.log("counter", counter, "colWidthHasBeenSet", colWidthHasBeenSet, originalColWidth, currentColWidth);
+	    if (counter > 0 && colWidthHasBeenSet === false) {
+		counter -= 1;
+		// console.log("no gridRef or gridRef.current, setting delay", counter)
+		timer = setTimeout(conditionallyAutosize, delay)
+		return
+	    } else if (counter > 0 && currentColWidth === 200) {
+		counter -= 1;
+
+		// console.log(
+		//     "new colwidth not recognized yet",
+		//     counter, originalColWidth, gridRef.current!.columnApi!.columnModel!.displayedColumns[0].actualWidth)
+
+		timer = setTimeout(conditionallyAutosize, delay)
+		return
+
+	    }
+	}
+	timer = setTimeout(conditionallyAutosize, delay);
+	return () => clearTimeout(timer);
     }
+
+    makeCondtionalAutosize(50, 10)
     return (
         <div className='df-viewer'>
             <div style={{height: 500, width: 2500}} className='theme-hanger ag-theme-alpine-dark'>
@@ -86,6 +139,8 @@ export function DFViewer(
                     ref={gridRef}
                     gridOptions={gridOptions}
                     rowData={agData}
+
+
                     columnDefs={styledColumns}
                 ></AgGridReact>
             </div>
