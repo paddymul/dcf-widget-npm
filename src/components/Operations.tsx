@@ -2,8 +2,9 @@ import React, {Component, useState, useEffect, useReducer, useRef, useLayoutEffe
 import _ from 'lodash';
 import {Operation, SetOperationsFunc, OperationEventFunc, NoArgEventFunc} from './OperationUtils';
 import {CommandConfigT} from './CommandUtils';
+import {replaceInArr} from './utils';
 import {bakedCommandConfig} from './bakedOperationDefaults';
-import {OperationDetail, OperationAdder} from './CommandDetail';
+import {OperationDetail} from './OperationDetail';
 import {AgGridReact} from 'ag-grid-react'; // the AG Grid React Component
 import {ColDef, Grid, GridOptions} from 'ag-grid-community';
 import {updateAtMatch} from './gridUtils';
@@ -66,6 +67,29 @@ export const OperationsList = ({
                 rowData={rows}
                 columnDefs={styledColumns}
             ></AgGridReact>
+        </div>
+    );
+};
+
+export const OperationAdder = ({column, addOperationCb, defaultArgs}) => {
+    const addOperationByName = (localOperationName: string) => {
+        return () => {
+            const defaultOperation = defaultArgs[localOperationName];
+            addOperationCb(replaceInArr(defaultOperation, 'col', column));
+        };
+    };
+
+    return (
+        <div className='operation-adder'>
+            <span className={'column-name'}> Column: {column}</span>
+            <fieldset>
+                {_.keys(defaultArgs).map((optionVal) => (
+                    <button key={optionVal} onClick={addOperationByName(optionVal)}>
+                        {' '}
+                        {optionVal}{' '}
+                    </button>
+                ))}
+            </fieldset>
         </div>
     );
 };
