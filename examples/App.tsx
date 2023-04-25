@@ -16,7 +16,8 @@ const examples = {
     WidgetDCFCellEx: {title: 'WigetDCFCell', file: 'WidgetDCFCellEx'},
     ColumnsEditorEx: {title: 'ColumnsEditor', file: 'ColumnsEditorEx'},
     CommandViewerEx: {title: 'CommandViewer', file: 'CommandViewerEx'},
-    DFViewerEx: {title: 'DFViewer', file: 'DFViewerEx'}
+    DFViewerEx: {title: 'DFViewer', file: 'DFViewerEx'},
+    StatusBarEx: {title: 'StatusBar', file: 'StatusBarEx'}
 };
 
 // The examples use a code-loading technique that I have described in
