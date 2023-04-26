@@ -80,8 +80,17 @@ export function DFViewer(
         if (gridRef === undefined || gridRef.current === null) {
             currentColWidth = 200;
         } else {
-            currentColWidth =
-                gridRef!.current!.columnApi!.columnModel!.displayedColumns[0].actualWidth;
+            try {
+                const dc = gridRef!.current!.columnApi.getAllDisplayedColumns();
+
+                if (dc.length !== 0) {
+                    currentColWidth = dc[0].getActualWidth();
+                } else {
+                    currentColWidth = 200;
+                }
+            } catch (e) {
+                console.log('88, gridref not defined yet', e);
+            }
         }
 
         // console.log('first pass currentColWidth');
@@ -95,14 +104,12 @@ export function DFViewer(
                     if (gridRef.current.columnApi !== undefined) {
                         // console.log("calling autosizeAllColumns", count, delay);
                         gridRef.current.columnApi.autoSizeAllColumns();
-                        const cm = gridRef.current.columnApi.columnModel;
+                        const dc = gridRef.current.columnApi.getAllDisplayedColumns();
                         // console.log("bodyWidth", cm.bodyWidth)
                         // console.log("cm", cm)
-                        const dc = cm.displayedColumns;
-                        // console.log('dc', dc);
 
                         if (dc.length !== 0) {
-                            const aw = dc[0].actualWidth; // this eventually changes after the resize
+                            const aw = dc[0].getActualWidth(); // this eventually changes after the resize
                             //console.log("dc", aw);
                             if (colWidthHasBeenSet === false) {
                                 originalColWidth = aw;
