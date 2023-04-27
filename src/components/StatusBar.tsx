@@ -38,8 +38,6 @@ const columnDefs: ColDef[] = [
     {field: 'reorderdColumns'}
 ];
 
-// export function StatusBar({config:DfConfig,
-// 			   setConfig:unknown}) {
 export function StatusBar({config, setConfig}) {
     const {totalRows, columns, rowsShown, sampleSize, summaryStats, reorderdColumns} = config;
 
@@ -53,51 +51,30 @@ export function StatusBar({config, setConfig}) {
             reorderdColumns: reorderdColumns.toString()
         }
     ];
-    // const styledColumns = updateAtMatch(
-    //     _.clone(agColsPure),
-    //     activeCol || '___never',
-    //     {
-    //         cellStyle: {background: 'var(--ag-range-selection-background-color-3)'}
-    //     },
-    //     {cellStyle: {}}
-    // );
 
-    //console.log("styledColumns after updateAtMatch", activeCol, styledColumns)
-  const coreUpdate = () => {
-	    const origSummaryStats = config.summaryStats;
-	    const newSummaryStats = !origSummaryStats
-	    console.log("origSummaryStats", origSummaryStats, "newSummaryStats", newSummaryStats);
-	    const newConfig = _.clone({...config, 'summaryStats':newSummaryStats,
-				       'rowsShown': config.rowsShown + 1
-				      });
-	    console.log("newConfig", newConfig)
-	    setConfig(newConfig)
-  }
-  const updateDict = (event) =>  {
-          const colName = event.column.getColId();
-	  if (colName == "summaryStats") {
-	    coreUpdate()
-	  }
+    const updateDict = (event) => {
+        const colName = event.column.getColId();
+        if (colName === 'summaryStats') {
+            setConfig({...config, summaryStats: !config.summaryStats});
+        } else if (colName === 'reorderdColumns') {
+            setConfig({...config, reorderdColumns: !config.reorderdColumns});
         }
+    };
     const gridOptions: GridOptions = {
-        rowSelection: 'single',
-        //onRowClicked: (event) => console.log('A row was clicked'),
-
+        rowSelection: 'single'
     };
 
     const gridRef = useRef<AgGridReact<unknown>>(null);
     const defaultColDef = {
         type: 'left-aligned',
-        cellStyle: {'textAlign': 'left'}
+        cellStyle: {textAlign: 'left'}
     };
     return (
         <div className='statusBar'>
-	<button onClick={coreUpdate}>outside click</button>
             <div style={{height: 50, width: 2500}} className='theme-hanger ag-theme-alpine-dark'>
-
                 <AgGridReact
                     ref={gridRef}
-      onCellClicked={ updateDict}
+                    onCellClicked={updateDict}
                     gridOptions={gridOptions}
                     defaultColDef={defaultColDef}
                     rowData={rowData}
@@ -108,16 +85,6 @@ export function StatusBar({config, setConfig}) {
     );
 }
 
-function StatusPairWrapper({config, setConfig}) {
-  console.log("statusPairWrapper config.summaryStats", config.summaryStats);
-    return (
-        <div>
-            <StatusBar config={config} setConfig={setConfig} />
-        </div>
-    );
-
-
-}
 export function StatusBarEx() {
     const [sampleConfig, setConfig] = useState<DfConfig>({
         totalRows: 1309,
@@ -128,7 +95,7 @@ export function StatusBarEx() {
         reorderdColumns: false
     });
 
-  return (<StatusPairWrapper config={sampleConfig} setConfig={setConfig} />)
+    return <StatusBar config={sampleConfig} setConfig={setConfig} />;
 }
 
 export const DictView = ({fullDict}) => {
