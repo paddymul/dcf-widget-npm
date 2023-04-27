@@ -63,29 +63,41 @@ export function StatusBar({config, setConfig}) {
     // );
 
     //console.log("styledColumns after updateAtMatch", activeCol, styledColumns)
+  const coreUpdate = () => {
+	    const origSummaryStats = config.summaryStats;
+	    const newSummaryStats = !origSummaryStats
+	    console.log("origSummaryStats", origSummaryStats, "newSummaryStats", newSummaryStats);
+	    const newConfig = _.clone({...config, 'summaryStats':newSummaryStats,
+				       'rowsShown': config.rowsShown + 1
+				      });
+	    console.log("newConfig", newConfig)
+	    setConfig(newConfig)
+  }
+  const updateDict = (event) =>  {
+          const colName = event.column.getColId();
+	  if (colName == "summaryStats") {
+	    coreUpdate()
+	  }
+        }
     const gridOptions: GridOptions = {
         rowSelection: 'single',
-        onRowClicked: (event) => console.log('A row was clicked')
-        // onCellClicked: (event) => {
-        //     const colName = event.column.getColId();
-        //     if (setActiveCol === undefined || colName === undefined) {
-        //         return;
-        //     } else {
-        //         setActiveCol(colName);
-        //     }
-        // }
+        //onRowClicked: (event) => console.log('A row was clicked'),
+
     };
 
     const gridRef = useRef<AgGridReact<unknown>>(null);
     const defaultColDef = {
-        type: 'leftAligned',
-        cellStyle: {'text-align': 'left'}
+        type: 'left-aligned',
+        cellStyle: {'textAlign': 'left'}
     };
     return (
         <div className='statusBar'>
+	<button onClick={coreUpdate}>outside click</button>
             <div style={{height: 50, width: 2500}} className='theme-hanger ag-theme-alpine-dark'>
+
                 <AgGridReact
                     ref={gridRef}
+      onCellClicked={ updateDict}
                     gridOptions={gridOptions}
                     defaultColDef={defaultColDef}
                     rowData={rowData}
@@ -96,22 +108,27 @@ export function StatusBar({config, setConfig}) {
     );
 }
 
+function StatusPairWrapper({config, setConfig}) {
+  console.log("statusPairWrapper config.summaryStats", config.summaryStats);
+    return (
+        <div>
+            <StatusBar config={config} setConfig={setConfig} />
+        </div>
+    );
+
+
+}
 export function StatusBarEx() {
     const [sampleConfig, setConfig] = useState<DfConfig>({
         totalRows: 1309,
         columns: 30,
         rowsShown: 500,
         sampleSize: 10_000,
-        summaryStats: true,
+        summaryStats: false,
         reorderdColumns: false
     });
 
-    return (
-        <div>
-            <StatusBar config={sampleConfig} setConfig={setConfig} />
-            <StatusBar config={sampleConfig} setConfig={setConfig} />
-        </div>
-    );
+  return (<StatusPairWrapper config={sampleConfig} setConfig={setConfig} />)
 }
 
 export const DictView = ({fullDict}) => {
