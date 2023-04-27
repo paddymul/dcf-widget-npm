@@ -38,14 +38,11 @@ const columnDefs: ColDef[] = [
     {field: 'reorderdColumns'}
 ];
 
-export function StatusBar({
-    totalRows,
-    columns,
-    rowsShown,
-    sampleSize,
-    summaryStats,
-    reorderdColumns
-}: DfConfig) {
+// export function StatusBar({config:DfConfig,
+// 			   setConfig:unknown}) {
+export function StatusBar({config, setConfig}) {
+    const {totalRows, columns, rowsShown, sampleSize, summaryStats, reorderdColumns} = config;
+
     const rowData = [
         {
             totalRows,
@@ -100,35 +97,21 @@ export function StatusBar({
 }
 
 export function StatusBarEx() {
-    const sampleConfig = {
+    const [sampleConfig, setConfig] = useState<DfConfig>({
         totalRows: 1309,
         columns: 30,
         rowsShown: 500,
         sampleSize: 10_000,
         summaryStats: true,
         reorderdColumns: false
-    };
+    });
 
     return (
         <div>
-            <StatusBar {...sampleConfig} />
+            <StatusBar config={sampleConfig} setConfig={setConfig} />
+            <StatusBar config={sampleConfig} setConfig={setConfig} />
         </div>
     );
-
-    /*
-  return <div>
-
-    
-    <StatusBar
-    totalRows={1309}
-    columns={30}
-    rowsShown={500}
-    sampleSize={10_000}
-    summaryStats={false}
-    reorderdColumns={true}
-    />
-    </div>
-*/
 }
 
 export const DictView = ({fullDict}) => {
