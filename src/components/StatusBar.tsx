@@ -68,16 +68,17 @@ export function StatusBar({
     //console.log("styledColumns after updateAtMatch", activeCol, styledColumns)
     const gridOptions: GridOptions = {
         rowSelection: 'single',
-        onRowClicked: (event) => console.log('A row was clicked'),
-        onCellClicked: (event) => {
-            const colName = event.column.getColId();
-            if (setActiveCol === undefined || colName === undefined) {
-                return;
-            } else {
-                setActiveCol(colName);
-            }
-        }
+        onRowClicked: (event) => console.log('A row was clicked')
+        // onCellClicked: (event) => {
+        //     const colName = event.column.getColId();
+        //     if (setActiveCol === undefined || colName === undefined) {
+        //         return;
+        //     } else {
+        //         setActiveCol(colName);
+        //     }
+        // }
     };
+
     const gridRef = useRef<AgGridReact<unknown>>(null);
     const defaultColDef = {
         type: 'leftAligned',
@@ -110,7 +111,7 @@ export function StatusBarEx() {
 
     return (
         <div>
-            <StatusBar {...{sampleConfig}} />
+            <StatusBar {...sampleConfig} />
         </div>
     );
 
