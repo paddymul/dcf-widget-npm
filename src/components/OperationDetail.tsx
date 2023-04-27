@@ -2,25 +2,9 @@ import React, {Component, useState, useEffect, useReducer, useRef, useLayoutEffe
 import _ from 'lodash';
 import {Operation, SettableArg, OperationEventFunc, NoArgEventFunc} from './OperationUtils';
 import {ActualArg, CommandArgSpec} from './CommandUtils';
+import {objWithoutNull, replaceAtIdx, replaceAtKey} from './utils';
 
 const nullSetter = () => 5;
-
-function replaceInArr<T>(arr: T[], old: T, subst: T): T[] {
-    return arr.map((item: T) => (item === old ? subst : item));
-}
-
-function replaceAtIdx<T>(arr: T[], idx: number, subst: T): T[] {
-    return arr.map((item: T, innerIdx: number) => (innerIdx === idx ? subst : item));
-}
-
-function replaceAtKey<T>(obj: Record<string, T>, key: string, subst: T): Record<string, T> {
-    const objCopy = _.clone(obj);
-    objCopy[key] = subst;
-    return objCopy;
-}
-
-const objWithoutNull = (obj: Record<string, string>, extraStrips: string[] = []) =>
-    _.pickBy(obj, (x) => ![null, undefined, ...extraStrips].includes(x));
 
 export const OperationDetail = ({
     command,
@@ -197,27 +181,4 @@ const ArgGetter = ({
     } else {
         return <h3> unknown argtype </h3>;
     }
-};
-
-export const OperationAdder = ({column, addOperationCb, defaultArgs}) => {
-    const addOperationByName = (localOperationName: string) => {
-        return () => {
-            const defaultOperation = defaultArgs[localOperationName];
-            addOperationCb(replaceInArr(defaultOperation, 'col', column));
-        };
-    };
-
-    return (
-        <div className='operation-adder'>
-            <span className={'column-name'}> Column: {column}</span>
-            <fieldset>
-                {_.keys(defaultArgs).map((optionVal) => (
-                    <button key={optionVal} onClick={addOperationByName(optionVal)}>
-                        {' '}
-                        {optionVal}{' '}
-                    </button>
-                ))}
-            </fieldset>
-        </div>
-    );
 };
