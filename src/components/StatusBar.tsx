@@ -1,4 +1,12 @@
-import React, {Component, useState, useRef, useEffect, useLayoutEffect, useCallback, CSSProperties} from 'react';
+import React, {
+    Component,
+    useState,
+    useRef,
+    useEffect,
+    useLayoutEffect,
+    useCallback,
+    CSSProperties
+} from 'react';
 import _ from 'lodash';
 import {updateAtMatch, dfToAgrid} from './gridUtils';
 import {AgGridReact} from 'ag-grid-react'; // the AG Grid React Component
@@ -10,49 +18,44 @@ import {
     GridReadyEvent
 } from 'ag-grid-community';
 
-// import '../../css/ag-alpine-theme-local.scss'
-// import '../npm-styles.scss';
-// import '../tight-grid.css';
 export type setColumFunc = (newCol: string) => void;
 
-
+export interface DfConfig {
+    totalRows: number;
+    columns: number;
+    rowsShown: number;
+    sampleSize: number;
+    summaryStats: boolean;
+    reorderdColumns: boolean;
+}
 
 const columnDefs: ColDef[] = [
-    {field: 'totalRows' },
-    {field: 'columns' },
-    {field: 'rowsShown' },
+    {field: 'totalRows'},
+    {field: 'columns'},
+    {field: 'rowsShown'},
     {field: 'sampleSize'},
     {field: 'summaryStats'},
     {field: 'reorderdColumns'}
 ];
 
-
-export function StatusBar(
-    {
-	totalRows,
-	columns,
-	rowsShown,
-	sampleSize,
-	summaryStats,
-	reorderdColumns
-    }: {
-	totalRows:number;
-	columns:number;
-	rowsShown:number;
-	sampleSize:number;
-	summaryStats:boolean;
-	reorderdColumns:boolean;
-    }
-) {
-
-    const rowData = [{
-	totalRows,
-	columns,
-	rowsShown,
-	sampleSize,
-	summaryStats:summaryStats.toString(),
-	reorderdColumns:reorderdColumns.toString()
-    }];
+export function StatusBar({
+    totalRows,
+    columns,
+    rowsShown,
+    sampleSize,
+    summaryStats,
+    reorderdColumns
+}: DfConfig) {
+    const rowData = [
+        {
+            totalRows,
+            columns,
+            rowsShown,
+            sampleSize,
+            summaryStats: summaryStats.toString(),
+            reorderdColumns: reorderdColumns.toString()
+        }
+    ];
     // const styledColumns = updateAtMatch(
     //     _.clone(agColsPure),
     //     activeCol || '___never',
@@ -76,17 +79,17 @@ export function StatusBar(
         }
     };
     const gridRef = useRef<AgGridReact<unknown>>(null);
-    const defaultColDef= {
-	type: 'leftAligned',
-	cellStyle: {'text-align':'left'}
+    const defaultColDef = {
+        type: 'leftAligned',
+        cellStyle: {'text-align': 'left'}
     };
     return (
         <div className='statusBar'>
             <div style={{height: 50, width: 2500}} className='theme-hanger ag-theme-alpine-dark'>
                 <AgGridReact
                     ref={gridRef}
-        gridOptions={gridOptions}
-	defaultColDef={defaultColDef}
+                    gridOptions={gridOptions}
+                    defaultColDef={defaultColDef}
                     rowData={rowData}
                     columnDefs={columnDefs}
                 ></AgGridReact>
@@ -96,33 +99,50 @@ export function StatusBar(
 }
 
 export function StatusBarEx() {
+    const sampleConfig = {
+        totalRows: 1309,
+        columns: 30,
+        rowsShown: 500,
+        sampleSize: 10_000,
+        summaryStats: true,
+        reorderdColumns: false
+    };
 
-    return <StatusBar
+    return (
+        <div>
+            <StatusBar {...{sampleConfig}} />
+        </div>
+    );
+
+    /*
+  return <div>
+
+    
+    <StatusBar
     totalRows={1309}
     columns={30}
     rowsShown={500}
     sampleSize={10_000}
     summaryStats={false}
     reorderdColumns={true}
-	/>
+    />
+    </div>
+*/
 }
 
-
-
-
-
-
-export const  DictView = ({fullDict}) => {
-        return (<Table>
-                  <tr><th>foo</th><th>bar</th><th>baz</th></tr>
-                  <tr><td>{fullDict['foo']}</td><td>{fullDict['bar']}</td><td>{fullDict['baz']}</td></tr>
-                </Table>);
-    }
-
-
-
-
-
-
-
-
+export const DictView = ({fullDict}) => {
+    return (
+        <table>
+            <tr>
+                <th>foo</th>
+                <th>bar</th>
+                <th>baz</th>
+            </tr>
+            <tr>
+                <td>{fullDict['foo']}</td>
+                <td>{fullDict['bar']}</td>
+                <td>{fullDict['baz']}</td>
+            </tr>
+        </table>
+    );
+};
