@@ -18,3 +18,4 @@ export * as CommandsComponent from './components/Operations';
 export * as DependentTabs from './components/DependentTabs';
 export * as CommandUtils from './components/CommandUtils';
 export {DFViewer} from './components/DFViewer';
+export * as StatusBar from './components/StatusBar';

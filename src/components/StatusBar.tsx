@@ -97,20 +97,3 @@ export function StatusBarEx() {
 
     return <StatusBar config={sampleConfig} setConfig={setConfig} />;
 }
-
-export const DictView = ({fullDict}) => {
-    return (
-        <table>
-            <tr>
-                <th>foo</th>
-                <th>bar</th>
-                <th>baz</th>
-            </tr>
-            <tr>
-                <td>{fullDict['foo']}</td>
-                <td>{fullDict['bar']}</td>
-                <td>{fullDict['baz']}</td>
-            </tr>
-        </table>
-    );
-};

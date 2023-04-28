@@ -4,6 +4,7 @@ import {getOperationResultSetterT, serverGetTransformRequester} from './Dependen
 import {ColumnsEditor} from './ColumnsEditor';
 import {tableDf, DFWhole} from './staticData';
 import {DFViewer} from './DFViewer';
+import {StatusBar, DfConfig} from './StatusBar';
 import {CommandConfigT} from './CommandUtils';
 import {bakedCommandConfig} from './bakedOperationDefaults';
 import {requestDf} from './utils';
@@ -47,12 +48,16 @@ export function WidgetDCFCell({
     origDf,
     getOrRequester,
     commandConfig,
-    exposeCommandConfigSetter
+    exposeCommandConfigSetter,
+    dfConfig,
+    on_dfConfig
 }: {
     origDf: DFWhole;
     getOrRequester: getOperationResultSetterT;
     commandConfig: CommandConfigT;
     exposeCommandConfigSetter: CommandConfigSetterT;
+    dfConfig: DfConfig;
+    on_dfConfig: unknown;
 }) {
     const [activeCommandConfig, setCommandConfig] = useState(commandConfig);
     exposeCommandConfigSetter(setCommandConfig);
@@ -61,6 +66,7 @@ export function WidgetDCFCell({
     return (
         <div className='dcf-root flex flex-col' style={{width: '100%', height: '100%'}}>
             <div className='orig-df flex flex-row' style={{height: '250px', overflow: 'hidden'}}>
+                <StatusBar config={dfConfig} setConfig={on_dfConfig} />
                 <DFViewer df={origDf} activeCol={activeCol} setActiveCol={setActiveCol} />
             </div>
             <ColumnsEditor
@@ -74,6 +80,15 @@ export function WidgetDCFCell({
 }
 
 export function WidgetDCFCellExample() {
+    const [sampleConfig, setConfig] = useState<DfConfig>({
+        totalRows: 1309,
+        columns: 30,
+        rowsShown: 500,
+        sampleSize: 10_000,
+        summaryStats: false,
+        reorderdColumns: false
+    });
+
     return (
         <WidgetDCFCell
             origDf={tableDf}
@@ -82,6 +97,8 @@ export function WidgetDCFCellExample() {
                 console.log('exposeCommandConfigSetter called with', e)
             }
             commandConfig={bakedCommandConfig}
+            dfConfig={sampleConfig}
+            on_dfConfig={setConfig}
         />
     );
 }
