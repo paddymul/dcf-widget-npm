@@ -71,7 +71,7 @@ export function StatusBar({config, setConfig}) {
     };
     return (
         <div className='statusBar'>
-            <div style={{height: 50, width: 2500}} className='theme-hanger ag-theme-alpine-dark'>
+            <div style={{height: 50}} className='theme-hanger ag-theme-alpine-dark'>
                 <AgGridReact
                     ref={gridRef}
                     onCellClicked={updateDict}

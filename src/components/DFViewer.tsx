@@ -147,7 +147,7 @@ export function DFViewer(
     makeCondtionalAutosize(50, 10);
     return (
         <div className='df-viewer'>
-            <div style={{height: 500, width: 2500}} className='theme-hanger ag-theme-alpine-dark'>
+            <div style={{height: 500}} className='theme-hanger ag-theme-alpine-dark'>
                 <AgGridReact
                     ref={gridRef}
                     gridOptions={gridOptions}
